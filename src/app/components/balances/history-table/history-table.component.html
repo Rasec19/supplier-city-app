@@ -1,0 +1,29 @@
+<p-card header="Historia" [style]="{ width: '100rem', margin: 'auto', marginTop: '4rem', marginBottom: '4rem'}">
+  <p-table
+    class="text-center"
+    [value]="histories"
+    [paginator]="true"
+    [rows]="5"
+    [showCurrentPageReport]="true"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    currentPageReportTemplate="Registros del {first} hasta el {last} de {totalRecords} totales"
+    [rowsPerPageOptions]="[5, 10, 20]"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th [style]="{ backgroundColor: 'lightGray' }">Fecha</th>
+            <th [style]="{ backgroundColor: 'lightGray' }">Política</th>
+            <th [style]="{ backgroundColor: 'lightGray' }">Descripción</th>
+            <th [style]="{ backgroundColor: 'lightGray' }">Días</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-stories>
+        <tr>
+            <td class="text-center">{{ stories.dates }}</td>
+            <td class="text-center">{{ stories.politycs }}</td>
+            <td class="text-center">{{ stories.descripcion }}</td>
+            <td class="text-center">{{ stories.days }}</td>
+        </tr>
+    </ng-template>
+  </p-table>
+</p-card>

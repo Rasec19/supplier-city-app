@@ -1,0 +1,31 @@
+<p-card header="Saldos" [style]="{ width: '100rem', margin: 'auto', marginTop: '4rem'}">
+  <p-table
+    class="text-center"
+    [value]="stories"
+    [paginator]="true"
+    [rows]="5"
+    [showCurrentPageReport]="true"
+    [tableStyle]="{ 'min-width': '50rem' }"
+    currentPageReportTemplate="Registros del {first} hasta el {last} de {totalRecords} totales"
+    [rowsPerPageOptions]="[5, 10, 20]"
+>
+    <ng-template pTemplate="header">
+        <tr>
+            <th [style]="{ backgroundColor: 'lightGray' }">Vacaciones</th>
+            <th [style]="{ backgroundColor: 'lightGray' }">Actual</th>
+            <th [style]="{ backgroundColor: 'lightGray' }">Programado</th>
+            <th [style]="{ backgroundColor: 'lightGray' }">Disponible</th>
+            <th [style]="{ backgroundColor: 'lightGray' }">Periodo</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-stories>
+        <tr>
+            <td class="text-center">{{ stories.vacations }}</td>
+            <td class="text-center">{{ stories.current }}</td>
+            <td class="text-center">{{ stories.programated }}</td>
+            <td class="text-center">{{ stories.available }}</td>
+            <td class="text-center">{{ stories.period }}</td>
+        </tr>
+    </ng-template>
+  </p-table>
+</p-card>
