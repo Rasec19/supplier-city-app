@@ -28,7 +28,6 @@ export class ActionsCardComponent {
     const tipoLicencia = this.vacationRquestForm.controls['tipoLicencia'].value
     const fechas = this.vacationRquestForm.controls['fechas'].value
     const razon = this.vacationRquestForm.controls['razon'].value
-    console.log({fechas, tipoLicencia, razon})
 
     const body = {
       user_id: 500,
@@ -41,10 +40,9 @@ export class ActionsCardComponent {
       "updated_by": 500,
       "updated_on": new Date()
     }
-    console.log(body)
     this.employService.createVacationRequest(500, body).subscribe(res => {
-      console.log(res)
       this.visible = false
+      location.reload()
     })
   }
 
