@@ -5,5 +5,6 @@ export interface IStory {
   disponibleVisual: number,
   disponibleInterno: number,
   periodo: string,
-  proporcionales: number
+  proporcionales: number,
+  nombrePolitica: string
 }

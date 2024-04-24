@@ -23,6 +23,7 @@ export class AppComponent {
       this.usuarioLogin = res.usuarioLogin;
       this.nombre = res.nombre;
       this.balances = res.saldos;
+      console.log(res)
     })
   }
 }
