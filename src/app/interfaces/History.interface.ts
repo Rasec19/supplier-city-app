@@ -1,6 +1,6 @@
 export interface IHistory {
-  dates: string,
-  politycs: string,
-  descripcion: string,
-  days: string,
+  "fecha": string,
+  "politica": number,
+  "descripcion": string,
+  "dias": number
 }

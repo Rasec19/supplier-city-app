@@ -2,7 +2,8 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
-import { BalancesTableComponent } from './balances-table/balances-table.component';
+import { BalancesTableComponent } from './balances-table/balances-table.component'
+
 
 
 

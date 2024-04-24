@@ -1,8 +1,12 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { CardModule } from 'primeng/card';
+import { FormsModule, ReactiveFormsModule,  } from '@angular/forms';
+
 import { TableModule } from 'primeng/table';
-import { HistoryTableComponent } from '../balances/history-table/history-table.component';
+import { DropdownModule } from 'primeng/dropdown';
+import { CardModule } from 'primeng/card';
+
+import { HistoryTableComponent } from './history-table/history-table.component';
 
 
 
@@ -14,9 +18,12 @@ import { HistoryTableComponent } from '../balances/history-table/history-table.c
     CommonModule,
     CardModule,
     TableModule,
+    ReactiveFormsModule,
+    FormsModule,
+    DropdownModule,
   ],
   exports: [
-    HistoryTableComponent
+    HistoryTableComponent,
   ]
 })
 export class HistoryModule { }
