@@ -1,7 +1,7 @@
 <p-card header="Saldos" [style]="{ width: '100rem', margin: 'auto', marginTop: '4rem'}">
   <p-table
     class="text-center"
-    [value]="stories"
+    [value]="balances"
     [paginator]="true"
     [rows]="5"
     [showCurrentPageReport]="true"
@@ -18,13 +18,13 @@
             <th [style]="{ backgroundColor: 'lightGray' }">Periodo</th>
         </tr>
     </ng-template>
-    <ng-template pTemplate="body" let-stories>
+    <ng-template pTemplate="body" let-balances>
         <tr>
-            <td class="text-center">{{ stories.vacations }}</td>
-            <td class="text-center">{{ stories.current }}</td>
-            <td class="text-center">{{ stories.programated }}</td>
-            <td class="text-center">{{ stories.available }}</td>
-            <td class="text-center">{{ stories.period }}</td>
+            <td class="text-center">{{ balances.politicaVacaciones }}</td>
+            <td class="text-center">{{ balances.actual }} días</td>
+            <td class="text-center">{{ balances.programado }} días</td>
+            <td class="text-center">{{ balances.disponibleVisual }} días</td>
+            <td class="text-center">{{ balances.periodo }}</td>
         </tr>
     </ng-template>
   </p-table>

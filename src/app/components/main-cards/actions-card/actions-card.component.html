@@ -1,1 +1,24 @@
-<button class="btn btn-primary p-2">Pedir Vacaciones</button>
+<button class="btn btn-primary p-2" (click)="showDialog()">Solicitar Vacaciones</button>
+<button class="btn btn-primary p-2 ms-2" (click)="createReport()">Generar Reporte</button>
+
+<p-dialog header="Header" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw', height: '50vw' }" [draggable]="false" [resizable]="false">
+  <div class="container d-flex h-100 w-100 flex-column ">
+    <form [formGroup]="vacationRquestForm" class="w-100 h-100">
+      <div class="card flex justify-content-center mb-4 w-100" [style]="{ widht: '100%' }">
+        <p-dropdown formControlName="tipoLicencia" [style]="{ widht: '100%' }" class="w-100" [options]="licensTypes" [showClear]="true" placeholder="Tipo de licencia"></p-dropdown>
+      </div>
+      <div class="card flex justify-content-center mb-4 w-100" [style]="{ widht: '100%' }">
+        <p-calendar formControlName="fechas" [style]="{ widht: '100%' }" class="w-100" [(ngModel)]="dates" selectionMode="multiple" [readonlyInput]="true"></p-calendar>
+      </div>
+      <div class="card flex justify-content-center mb-4 w-100">
+        <input type="text" pInputText formControlName="razon" placeholder="Razon"/>
+     </div>
+    </form>
+    <div class="row w-100 justify-content-end">
+      <button class="btn btn-primary" (click)="vacationRequest()">Enviar solicitud</button>
+    </div>
+  </div>
+  <!-- <div class="row w-100 justify-content-end">
+    <button class="btn btn-primary">Enviar solicitud</button>
+  </div> -->
+</p-dialog>

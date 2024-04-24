@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { IStory } from 'src/app/interfaces/Story.interface';
+import { EmployService } from 'src/app/services/employ.service';
 
 @Component({
   selector: 'app-balances-table',
@@ -7,90 +8,15 @@ import { IStory } from 'src/app/interfaces/Story.interface';
   styleUrls: ['./balances-table.component.css']
 })
 export class BalancesTableComponent {
-  public stories: IStory[] = [
-    {
-      vacations: '100',
-      current: '100',
-      programated: '100',
-      available: '100',
-      period: '100',
-    },
-    {
-      vacations: '100',
-      current: '100',
-      programated: '100',
-      available: '100',
-      period: '100',
-    },
-    {
-      vacations: '100',
-      current: '100',
-      programated: '100',
-      available: '100',
-      period: '100',
-    },
-    {
-      vacations: '100',
-      current: '100',
-      programated: '100',
-      available: '100',
-      period: '100',
-    },
-    {
-      vacations: '100',
-      current: '100',
-      programated: '100',
-      available: '100',
-      period: '100',
-    },
-    {
-      vacations: '100',
-      current: '100',
-      programated: '100',
-      available: '100',
-      period: '100',
-    },
-    {
-      vacations: '100',
-      current: '100',
-      programated: '100',
-      available: '100',
-      period: '100',
-    },
-    {
-      vacations: '100',
-      current: '100',
-      programated: '100',
-      available: '100',
-      period: '100',
-    },
-    {
-      vacations: '100',
-      current: '100',
-      programated: '100',
-      available: '100',
-      period: '100',
-    },
-    {
-      vacations: '100',
-      current: '100',
-      programated: '100',
-      available: '100',
-      period: '100',
-    },
-    {
-      vacations: '100',
-      current: '100',
-      programated: '100',
-      available: '100',
-      period: '100',
-    },
-    {
-      vacations: '100',
-      current: '100',
-      programated: '100',
-      available: '100',
-      period: '100',
-    },
-  ];
+
+  @Input() public balances!: IStory | any
+
+  constructor( private employService: EmployService ) {}
+
+  ngOnInit(): void {
+    // this.employService.getUserInformation(500).subscribe(res => {
+    //   this.balances.push(res.saldos)
+    //   console.log(this.balances)
+    // })
+  }
 }

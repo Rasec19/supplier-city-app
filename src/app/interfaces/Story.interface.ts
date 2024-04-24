@@ -1,7 +1,9 @@
 export interface IStory {
-  vacations: string,
-  current: string,
-  programated: string,
-  available: string,
-  period: string,
+  politicaVacaciones: number,
+  actual: number,
+  programado: number,
+  disponibleVisual: number,
+  disponibleInterno: number,
+  periodo: string,
+  proporcionales: number
 }

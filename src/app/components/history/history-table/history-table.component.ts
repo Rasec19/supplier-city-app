@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import {Observable } from 'rxjs';
 import { IHistory } from 'src/app/interfaces/History.interface';
 import { HistoryService } from 'src/app/services/history.service';
 
@@ -25,13 +25,6 @@ export class HistoryTableComponent {
 
   ngOnInit() {
 
-    this.cities = [
-      { name: 'New York', code: 'NY' },
-      { name: 'Rome', code: 'RM' },
-      { name: 'London', code: 'LDN' },
-      { name: 'Istanbul', code: 'IST' },
-      { name: 'Paris', code: 'PRS' }
-  ];
   }
 
   filtrar(): void {

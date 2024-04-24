@@ -1,6 +1,6 @@
 <div class="d-flex mt-5">
-  <p-card class="col-6" header="Alan Morales" subheader="Empleado permanente - Sistemas" [style]="{ marginLeft: '1rem', marginRight: '8px'}">
-    <app-profile-card></app-profile-card>
+  <p-card class="col-6" header="{{ nombre }}" subheader="{{ tipo }}" [style]="{ marginLeft: '1rem', marginRight: '8px'}">
+    <app-profile-card [usuarioLogin]="usuarioLogin"></app-profile-card>
   </p-card>
   <p-card class="col-6" header="Acciones"  [style]="{ marginRight: '1rem', marginLeft: '8px' }">
     <app-actions-card></app-actions-card>
