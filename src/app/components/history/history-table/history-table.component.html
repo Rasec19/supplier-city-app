@@ -3,7 +3,7 @@
     <form [formGroup]="historyForm" class="mb-4 px-3">
       <div class="row mb-3">
         <div class="col-6">
-          <p-dropdown optionValue="code" [style]="{ width: '100%' }" formControlName="politic" [options]="cities" optionLabel="name" placeholder="Seleccionar politica"></p-dropdown>
+          <p-dropdown [style]="{ width: '100%' }" formControlName="politic" [options]="politics" placeholder="Seleccionar politica"></p-dropdown>
         </div>
         <div class="col-6">
           <p-dropdown [style]="{ width: '100%' }" formControlName="year" [options]="years" placeholder="Seleccionar año"></p-dropdown>

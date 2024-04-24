@@ -13,7 +13,8 @@ export class HistoryTableComponent {
   public histories$!: Observable<IHistory[]> | Observable<any>;
   cities: any;
 
-  years: string[] = ['2024', '2023', '2022', '2021', '2020'];
+  public years: string[] =  ['2024', '2023', '2022', '2021', '2020'];
+  public politics: string[] = ['1 año', '1 año a 5 años'];
 
   historyForm = new FormGroup({
     politic: new FormControl(''),
@@ -41,7 +42,6 @@ export class HistoryTableComponent {
     console.log({politic, year, id})
 
     this.histories$ = this.historyService.getUserHistory(id, year, politic);
-    this.histories$.subscribe(res => console.log(res))
   }
 
   clean(): void {
