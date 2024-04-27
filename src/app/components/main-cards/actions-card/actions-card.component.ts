@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { IReport } from 'src/app/interfaces/Report.interface';
 import { EmployService } from 'src/app/services/employ.service';
 import { ReportService } from 'src/app/services/report.service';
 
@@ -55,7 +56,26 @@ export class ActionsCardComponent {
       estatus: 1,
       politicaId: 1
     }
-    this.reportService.createReport(500, body).subscribe(res => console.log(res))
+    this.reportService.createReport(500, body).subscribe((res: IReport) => {
+      const fileBase64 = res.contenidoArchivo;
+
+      const byteCharacters = atob(fileBase64);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: res.tipoMime });
+
+      const fileUrl = window.URL.createObjectURL(blob);
+      const elementLink = document.createElement('a');
+      elementLink.href = fileUrl;
+      elementLink.download = res.nombreArchivo;
+      document.body.appendChild(elementLink);
+      elementLink.click();
+      window.open(fileUrl, '_blank');
+      window.URL.revokeObjectURL(fileUrl);
+    })
   }
 
   showDialog() {
