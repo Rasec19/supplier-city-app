@@ -26,7 +26,6 @@ export class AppComponent {
       this.nombre = res.nombre;
       this.balances = res.saldos;
       this.politicas = res.politicas;
-      console.log(res.politicas)
     })
   }
 }
