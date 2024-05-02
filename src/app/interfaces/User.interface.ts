@@ -6,4 +6,10 @@ export interface IUser {
   tipo: string,
   usuarioLogin: string,
   nombre: string
+  politicas: Array<IPolicies>
+}
+
+export interface IPolicies {
+  id: number,
+  nombrePolitica: string,
 }

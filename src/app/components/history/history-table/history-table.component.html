@@ -3,15 +3,25 @@
     <form [formGroup]="historyForm" class="mb-4 px-3">
       <div class="row mb-3">
         <div class="col-6">
-          <p-dropdown [style]="{ width: '100%' }" formControlName="politic" [options]="politics" placeholder="Seleccionar politica"></p-dropdown>
+          <p-dropdown [style]="{ width: '100%' }" formControlName="policies" [optionLabel]="'nombrePolitica'" [optionValue]="'id'"  [options]="policies" placeholder="Seleccionar politica"></p-dropdown>
         </div>
+        <!-- [optionLabel]="policies.nombrePolitica" [optionValue]="policies.id" -->
         <div class="col-6">
-          <p-dropdown [style]="{ width: '100%' }" formControlName="year" [options]="years" placeholder="Seleccionar año"></p-dropdown>
+          <p-dropdown
+            [style]="{ width: '100%' }"
+            formControlName="year"
+            [options]="years"
+            placeholder="Seleccionar año"
+          >
+          </p-dropdown>
+          <div *ngIf="historyForm.controls.year.invalid">
+            <span class="text-danger px-3">El año es requerido.</span>
+          </div>
         </div>
       </div>
       <div class="row justify-content-evenly ">
         <button class="btn btn-outline-primary w-25" (click)="clean()">Limpiar</button>
-        <button class="btn btn-primary w-25" (click)="filtrar()">Filtrar</button>
+        <button class="btn btn-primary w-25" [disabled]="!historyForm.valid" (click)="filtrar()">Filtrar</button>
       </div>
     </form>
   </div>

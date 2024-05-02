@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import {Observable } from 'rxjs';
 import { IHistory } from 'src/app/interfaces/History.interface';
+import { IPolicies } from 'src/app/interfaces/User.interface';
 import { HistoryService } from 'src/app/services/history.service';
 
 @Component({
@@ -14,21 +15,17 @@ export class HistoryTableComponent {
   cities: any;
 
   public years: string[] =  ['2024', '2023', '2022', '2021', '2020'];
-  public politics: string[] = ['1 año', '1 año a 5 años'];
+  @Input() policies!: any;
 
   historyForm = new FormGroup({
-    politic: new FormControl(''),
+    policies: new FormControl(''),
     year: new FormControl('', [Validators.required]),
   });
 
   constructor( private historyService: HistoryService ) {}
 
-  ngOnInit() {
-
-  }
-
   filtrar(): void {
-    const politic = this.historyForm.controls['politic'].value!
+    const politic = this.historyForm.controls['policies'].value!
     const year = this.historyForm.controls['year'].value!
     const id = 500;
 
@@ -39,7 +36,7 @@ export class HistoryTableComponent {
 
   clean(): void {
     this.historyForm.reset({
-      politic: '',
+      policies: '',
       year: '',
     })
   }

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { EmployService } from './services/employ.service';
 import { IStory } from './interfaces/Story.interface';
+import { IPolicies, IUser } from './interfaces/User.interface';
 
 @Component({
   selector: 'app-root',
@@ -13,17 +14,19 @@ export class AppComponent {
   public usuarioLogin: string = '';
   public nombre: string = '';
   public balances!: IStory;
+  public politicas: Array<IPolicies> = [];
 
   constructor( private employeService: EmployService ) {}
 
   ngOnInit() {
     // this.employeService.isValidUser(500).subscribe(res => console.log(res))
-    this.employeService.getUserInformation(500).subscribe(res => {
+    this.employeService.getUserInformation(500).subscribe((res: IUser) => {
       this.tipo = res.tipo;
       this.usuarioLogin = res.usuarioLogin;
       this.nombre = res.nombre;
       this.balances = res.saldos;
-      console.log(res)
+      this.politicas = res.politicas;
+      console.log(res.politicas)
     })
   }
 }
