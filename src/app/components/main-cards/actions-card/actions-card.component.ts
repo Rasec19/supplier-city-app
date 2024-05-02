@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IReport } from 'src/app/interfaces/Report.interface';
 import { EmployService } from 'src/app/services/employ.service';
@@ -13,10 +13,14 @@ export class ActionsCardComponent {
 
   @Input() public politicaUsuario: string = '';
   @Input() public politicaVacaciones: number = 0;
-  visible: boolean = false;
+  @ViewChild('calendar') calendar!: any;
+  isVacationsModalActive: boolean = false;
+  isloaderActive: boolean = false;
+  public isDisabled: boolean = false;
   public minDate: Date = new Date();
   public maxDate: Date = new Date();
   disabledDates: Date[] = [];
+  public selectedDatesVacations: string[] = [];
 
   dates: Date[] | undefined;
 
@@ -41,13 +45,24 @@ export class ActionsCardComponent {
     }
   }
 
+  printSelectedDates(): void {
+    const selectedVacations: Date[] = this.calendar.value;
+    if( selectedVacations ==  null ) this.selectedDatesVacations = [];
+
+    const dates = selectedVacations.map(dateVacation => dateVacation.toISOString());
+
+    this.selectedDatesVacations = dates;
+  }
+
   vacationRequest(): void {
+    this.isDisabled = !this.isDisabled;
+    this.isloaderActive = !this.isloaderActive;
     const fechas = this.vacationRquestForm.controls['fechas'].value
     const razon = this.vacationRquestForm.controls['razon'].value
 
     const body = {
       user_id: 500,
-      policy_id: 1,
+      policy_id: this.politicaVacaciones,
       days: fechas!.length,
       rangoFechas: fechas,
       reason: razon,
@@ -57,7 +72,8 @@ export class ActionsCardComponent {
       updated_on: new Date()
     }
     this.employService.createVacationRequest(500, body).subscribe(res => {
-      this.visible = false
+      this.isVacationsModalActive = false
+      this.isloaderActive = !this.isloaderActive;
       location.reload()
     })
   }
@@ -95,6 +111,6 @@ export class ActionsCardComponent {
   }
 
   showDialog() {
-    this.visible = true;
+    this.isVacationsModalActive = true;
   }
 }

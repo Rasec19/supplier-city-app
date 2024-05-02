@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -10,6 +10,11 @@ import { MainCardsModule } from './components/main-cards/main-cards.module';
 import { BalancesModule } from './components/balances/balances.module';
 import { HistoryModule } from './components/history/history.module';
 import { NavbarComponent } from './shared/navbar/navbar.component';
+
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+
+registerLocaleData(localeEs);
 @NgModule({
   declarations: [
     AppComponent,
@@ -25,7 +30,9 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
     NavbarComponent,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'es' }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

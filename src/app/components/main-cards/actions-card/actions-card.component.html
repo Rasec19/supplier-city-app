@@ -1,7 +1,7 @@
 <button class="btn btn-primary p-2" (click)="showDialog()">Solicitar Vacaciones</button>
 <button class="btn btn-primary p-2 ms-2" (click)="createReport()">Generar Reporte</button>
 
-<p-dialog header="Solicitud de vacaciones" [(visible)]="visible" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
+<p-dialog header="Solicitud de vacaciones" [(visible)]="isVacationsModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
   <div class="d-flex flex-column h-100 justify-content-between">
     <div class="row">
       <form [formGroup]="vacationRquestForm" class="card p-4">
@@ -9,9 +9,15 @@
           <h4 class="fw-semibold">Licencia: {{ politicaUsuario }}</h4>
         </div>
         <div class=" mb-4">
-          <p-calendar  [style]="{'width': '100%'}" [minDate]="minDate" [disabledDates]="disabledDates" placeholder="Selecionar fechas" formControlName="fechas" [(ngModel)]="dates" selectionMode="multiple" [readonlyInput]="true"></p-calendar>
+          <p-calendar #calendar (onClickOutside)="printSelectedDates()" [style]="{'width': '100%'}" [minDate]="minDate" [disabledDates]="disabledDates" placeholder="Selecionar fechas" formControlName="fechas" [(ngModel)]="dates" selectionMode="multiple" [readonlyInput]="true"></p-calendar>
           <div class="mt-1" *ngIf="vacationRquestForm.controls.fechas.invalid && vacationRquestForm.controls.fechas.touched">
             <span class="text-danger px-3">Las fechas son requeridas.</span>
+          </div>
+          <div class="mt-1" *ngIf="selectedDatesVacations.length >= 1">
+            <span class="px-3 fw-medium">Días seleccionados:</span>
+            <ul>
+              <li *ngFor="let vacationDate of selectedDatesVacations">{{ vacationDate | date:'EEEE, MMMM d, y' }}</li>
+            </ul>
           </div>
         </div>
         <div class="mb-4">
@@ -20,10 +26,7 @@
       </form>
     </div>
     <div class="row">
-      <button [disabled]="!vacationRquestForm.valid" class="btn btn-primary" (click)="vacationRequest()">Enviar solicitud</button>
+      <p-button [loading]="isloaderActive" [disabled]="!vacationRquestForm.valid || isDisabled" [style]="{ margin: 'auto', borderRadius: '8px', textAlign: 'center' }" (click)="vacationRequest()">Enviar solicitud</p-button>
     </div>
   </div>
-  <!-- <div class="row w-100 justify-content-end">
-    <button class="btn btn-primary">Enviar solicitud</button>
-  </div> -->
 </p-dialog>
