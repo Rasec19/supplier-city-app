@@ -11,6 +11,8 @@ export class ContentMainCardsComponent {
   @Input() public tipo: string = '';
   @Input() public nombre: string = '';
   @Input() public usuarioLogin: string = '';
+  @Input() public politicaUsuario: string = '';
+  @Input() public politicaVacaciones: number = 0;
 
   constructor() {}
 

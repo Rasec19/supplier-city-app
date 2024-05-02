@@ -1,4 +1,4 @@
-export interface IStory {
+export interface IBalance {
   politicaVacaciones: number,
   actual: number,
   programado: number,

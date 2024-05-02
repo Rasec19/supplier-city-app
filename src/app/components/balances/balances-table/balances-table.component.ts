@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { IStory } from 'src/app/interfaces/Story.interface';
+import { IBalance } from 'src/app/interfaces/Balance.interface';
 import { EmployService } from 'src/app/services/employ.service';
 
 @Component({
@@ -9,14 +9,13 @@ import { EmployService } from 'src/app/services/employ.service';
 })
 export class BalancesTableComponent {
 
-  @Input() public balances!: IStory | any
+  @Input() public balances!: IBalance[] | any
 
   constructor( private employService: EmployService ) {}
 
   formatPeriodo(datePeriod: string): string[] {
     const dates = datePeriod.split(',');
     const newDatePeriod = dates.map(date => date.trim().split(' ')[0].concat(' '));
-    console.log(newDatePeriod)
     return newDatePeriod
   }
 }

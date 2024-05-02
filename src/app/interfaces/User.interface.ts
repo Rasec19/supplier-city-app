@@ -1,8 +1,8 @@
-import { IStory } from "./Story.interface";
+import { IBalance } from "./Balance.interface";
 
 export interface IUser {
   añosAntiguedad: number[],
-  saldos: IStory,
+  saldos: IBalance[],
   tipo: string,
   usuarioLogin: string,
   nombre: string

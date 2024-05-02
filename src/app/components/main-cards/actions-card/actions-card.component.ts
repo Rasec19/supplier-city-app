@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IReport } from 'src/app/interfaces/Report.interface';
 import { EmployService } from 'src/app/services/employ.service';
@@ -11,22 +11,37 @@ import { ReportService } from 'src/app/services/report.service';
 })
 export class ActionsCardComponent {
 
+  @Input() public politicaUsuario: string = '';
+  @Input() public politicaVacaciones: number = 0;
   visible: boolean = false;
-
-  public licensTypes: string[] = ['1 año', '2 año', '3 año', '4 año', '5 año'];
+  public minDate: Date = new Date();
+  public maxDate: Date = new Date();
+  disabledDates: Date[] = [];
 
   dates: Date[] | undefined;
 
   vacationRquestForm = new FormGroup({
-    tipoLicencia: new FormControl('', [Validators.required]),
     fechas: new FormControl('', [Validators.required]),
-    razon: new FormControl('', [Validators.required]),
+    razon: new FormControl(''),
   })
 
-  constructor( private reportService: ReportService, private employService: EmployService ) {}
+  constructor( private reportService: ReportService, private employService: EmployService ) {
+    this.maxDate.setDate(this.maxDate.getDate() + 30);
+    this.calculateDisabledDates();
+  }
+
+  calculateDisabledDates(): void {
+    const today = new Date();
+    const thirtyDaysFromNow = new Date();
+    thirtyDaysFromNow.setDate(today.getDate() + 30);
+
+    // Loop through the dates and add them to disabledDates array
+    for (let d = new Date(today); d <= thirtyDaysFromNow; d.setDate(d.getDate() + 1)) {
+      this.disabledDates.push(new Date(d));
+    }
+  }
 
   vacationRequest(): void {
-    const tipoLicencia = this.vacationRquestForm.controls['tipoLicencia'].value
     const fechas = this.vacationRquestForm.controls['fechas'].value
     const razon = this.vacationRquestForm.controls['razon'].value
 
@@ -38,8 +53,8 @@ export class ActionsCardComponent {
       reason: razon,
       created_by: 500,
       created_on: new Date(),
-      "updated_by": 500,
-      "updated_on": new Date()
+      updated_by: 500,
+      updated_on: new Date()
     }
     this.employService.createVacationRequest(500, body).subscribe(res => {
       this.visible = false
@@ -49,6 +64,7 @@ export class ActionsCardComponent {
 
 
   createReport(): void {
+    console.log(this.politicaUsuario)
     const body = {
       empleadoId: 500,
       fechaInicio: "2024-04-24T18:46:04.356Z",

@@ -10,6 +10,7 @@ import { DialogModule } from 'primeng/dialog';
 import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
+import { InputTextModule } from 'primeng/inputtext';
 
 
 
@@ -30,6 +31,7 @@ import { CalendarModule } from 'primeng/calendar';
     FormsModule,
     CalendarModule,
     ReactiveFormsModule,
+    InputTextModule
   ],
   exports: [
     ProfileCardComponent,
