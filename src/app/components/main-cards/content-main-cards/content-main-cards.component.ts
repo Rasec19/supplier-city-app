@@ -13,6 +13,7 @@ export class ContentMainCardsComponent {
   @Input() public usuarioLogin: string = '';
   @Input() public politicaUsuario: string = '';
   @Input() public politicaVacaciones: number = 0;
+  @Input() politicas!: any;
 
   constructor() {}
 

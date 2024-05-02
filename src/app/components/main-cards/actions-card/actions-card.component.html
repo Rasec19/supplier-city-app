@@ -1,14 +1,14 @@
-<button class="btn btn-primary p-2" (click)="showDialog()">Solicitar Vacaciones</button>
-<button class="btn btn-primary p-2 ms-2" (click)="createReport()">Generar Reporte</button>
+<button class="btn btn-primary p-2" (click)="showVacationDialog()">Solicitar Vacaciones</button>
+<button class="btn btn-primary p-2 ms-2" (click)="showReporterDialog()">Generar Reporte</button>
 
-<p-dialog header="Solicitud de vacaciones" [(visible)]="isVacationsModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
+<p-dialog header="Solicitud de Vacaciones" [(visible)]="isVacationsModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
   <div class="d-flex flex-column h-100 justify-content-between">
     <div class="row">
       <form [formGroup]="vacationRquestForm" class="card p-4">
         <div class="flex justify-content-center mb-4">
           <h4 class="fw-semibold">Licencia: {{ politicaUsuario }}</h4>
         </div>
-        <div class=" mb-4">
+        <div class="mb-4">
           <p-calendar #calendar (onClickOutside)="printSelectedDates()" [style]="{'width': '100%'}" [minDate]="minDate" [disabledDates]="disabledDates" placeholder="Selecionar fechas" formControlName="fechas" [(ngModel)]="dates" selectionMode="multiple" [readonlyInput]="true"></p-calendar>
           <div class="mt-1" *ngIf="vacationRquestForm.controls.fechas.invalid && vacationRquestForm.controls.fechas.touched">
             <span class="text-danger px-3">Las fechas son requeridas.</span>
@@ -27,6 +27,40 @@
     </div>
     <div class="row">
       <p-button [loading]="isloaderActive" [disabled]="!vacationRquestForm.valid || isDisabled" [style]="{ margin: 'auto', borderRadius: '8px', textAlign: 'center' }" (click)="vacationRequest()">Enviar solicitud</p-button>
+    </div>
+  </div>
+</p-dialog>
+
+<p-dialog header="Generar Reporte" [(visible)]="isReporterModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
+  <div class="d-flex flex-column h-100 justify-content-between">
+    <div class="row">
+      <form [formGroup]="reportForm" class="card p-4">
+        <div class="flex justify-content-center mb-4">
+          <h5 class="fw-semibold">Introduzca el Rango de Fechas para la Generación del Reporte</h5>
+        </div>
+        <hr>
+        <div class="mb-4">
+          <p-calendar [style]="{'width': '100%'}" placeholder="Selecionar la fecha inicial" formControlName="fechaInicial" [(ngModel)]="datesInicial" selectionMode="single" [readonlyInput]="true"></p-calendar>
+          <div class="mt-1" *ngIf="reportForm.controls.fechaInicial.invalid && reportForm.controls.fechaInicial.touched">
+            <span class="text-danger px-3">La fehca inicial es requerida.</span>
+          </div>
+        </div>
+        <div class="mb-4">
+          <p-calendar [style]="{'width': '100%'}" placeholder="Selecionar la fecha final" formControlName="fechaFinal" [(ngModel)]="datesFinal" selectionMode="single" [readonlyInput]="true"></p-calendar>
+          <div class="mt-1" *ngIf="reportForm.controls.fechaFinal.invalid && reportForm.controls.fechaFinal.touched">
+            <span class="text-danger px-3">La fehca final es requerida.</span>
+          </div>
+        </div>
+        <div class="mb-4">
+          <p-dropdown [style]="{ width: '100%' }" formControlName="estatus" [optionLabel]="'nombreEstatus'" [optionValue]="'id'"  [options]="estatus" placeholder="Seleccionar estatus (opcional)"></p-dropdown>
+        </div>
+        <div class="mb-4">
+          <p-dropdown [style]="{ width: '100%' }" formControlName="politica" [optionLabel]="'nombrePolitica'" [optionValue]="'id'"  [options]="politicas" placeholder="Seleccionar politica (opcional)"></p-dropdown>
+        </div>
+      </form>
+    </div>
+    <div class="row">
+      <p-button [loading]="isloaderActive" [disabled]="!reportForm.valid || isDisabledReortBtn" [style]="{ margin: 'auto', borderRadius: '8px', textAlign: 'center' }" (click)="createReport()">Generar Reporte</p-button>
     </div>
   </div>
 </p-dialog>

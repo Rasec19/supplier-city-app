@@ -13,20 +13,53 @@ export class ActionsCardComponent {
 
   @Input() public politicaUsuario: string = '';
   @Input() public politicaVacaciones: number = 0;
+  @Input() politicas!: any;
+
   @ViewChild('calendar') calendar!: any;
+
   isVacationsModalActive: boolean = false;
+  isReporterModalActive: boolean = false;
   isloaderActive: boolean = false;
   public isDisabled: boolean = false;
+  public isDisabledReortBtn: boolean = false;
   public minDate: Date = new Date();
   public maxDate: Date = new Date();
   disabledDates: Date[] = [];
   public selectedDatesVacations: string[] = [];
 
   dates: Date[] | undefined;
+  datesInicial: Date[] | undefined;
+  datesFinal: Date[] | undefined;
+
+  public estatus = [
+    {
+      id: 1,
+      nombreEstatus: 'Aprobado'
+    },
+    {
+      id: 2,
+      nombreEstatus: 'Pendiente'
+    },
+    {
+      id: 3,
+      nombreEstatus: 'Rechazado'
+    },
+    {
+      id: 5,
+      nombreEstatus: 'Gozada'
+    },
+  ];
 
   vacationRquestForm = new FormGroup({
     fechas: new FormControl('', [Validators.required]),
     razon: new FormControl(''),
+  })
+
+  reportForm = new FormGroup({
+    fechaInicial: new FormControl('', [Validators.required]),
+    fechaFinal: new FormControl('', [Validators.required]),
+    estatus: new FormControl(1),
+    politica: new FormControl(0),
   })
 
   constructor( private reportService: ReportService, private employService: EmployService ) {
@@ -80,15 +113,29 @@ export class ActionsCardComponent {
 
 
   createReport(): void {
-    console.log(this.politicaUsuario)
+    this.isloaderActive = !this.isloaderActive;
+    this.isDisabledReortBtn = !this.isDisabledReortBtn;
+
+    const fechaInicio = this.reportForm.controls['fechaInicial'].value;
+    const fechaFin = this.reportForm.controls['fechaFinal'].value;
+    const estatus = this.reportForm.controls['estatus'].value;
+    const politicaId = this.reportForm.controls['politica'].value;
+
     const body = {
       empleadoId: 500,
-      fechaInicio: "2024-04-24T18:46:04.356Z",
-      fechaFin: "2024-04-25T18:46:04.356Z",
-      estatus: 1,
-      politicaId: 1
+      fechaInicio,
+      fechaFin,
+      estatus,
+      politicaId
     }
     this.reportService.createReport(500, body).subscribe((res: IReport) => {
+      this.reportForm.reset({
+        fechaInicial: '',
+        fechaFinal: '',
+        estatus: 1,
+        politica: 0
+      });
+
       const fileBase64 = res.contenidoArchivo;
 
       const byteCharacters = atob(fileBase64);
@@ -107,10 +154,17 @@ export class ActionsCardComponent {
       elementLink.click();
       window.open(fileUrl, '_blank');
       window.URL.revokeObjectURL(fileUrl);
+      this.isloaderActive = !this.isloaderActive;
+      this.isDisabledReortBtn = !this.isDisabledReortBtn;
+      this.isReporterModalActive = false;
     })
   }
 
-  showDialog() {
+  showVacationDialog() {
     this.isVacationsModalActive = true;
+  }
+
+  showReporterDialog() {
+    this.isReporterModalActive = true;
   }
 }
