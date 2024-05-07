@@ -123,7 +123,7 @@ export class ActionsCardComponent {
           },(err) => {
             // if ( err.error ) {
             // }
-            this.messageService.add({ severity: 'error', summary:'Error al cancelar', detail: err.error, life: 6000 })
+            this.messageService.add({ severity: 'error', summary:'Error al cancelar', detail: err.error, life: 5000 })
             // if( err.error.errors.nombre.length > 0 ) {
             //   this.messageService.add({ severity: 'error', summary:'Error al cancelar', detail: 'Debes seleccionar un registro.', life: 6000 });
             // }
