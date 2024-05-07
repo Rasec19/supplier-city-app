@@ -1,5 +1,6 @@
 <button class="btn btn-primary p-2" (click)="showVacationDialog()">Solicitar Vacaciones</button>
 <button class="btn btn-primary p-2 ms-2" (click)="showReporterDialog()">Generar Reporte</button>
+<button class="btn btn-primary p-2 ms-2" (click)="showCancelDailog()">Cancelar Vacaciones</button>
 
 <p-dialog header="Solicitud de Vacaciones" [(visible)]="isVacationsModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
   <div class="d-flex flex-column h-100 justify-content-between">
@@ -63,4 +64,44 @@
       <p-button [loading]="isloaderActive" [disabled]="!reportForm.valid || isDisabledReortBtn" [style]="{ margin: 'auto', borderRadius: '8px', textAlign: 'center' }" (click)="createReport()">Generar Reporte</p-button>
     </div>
   </div>
+</p-dialog>
+
+<p-dialog (onShow)="getAllVacationRequest()" header="Cancelar Vacaciones" [(visible)]="isCancelModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
+  <div class="row mb-4 mt-2">
+    <h5>Seleccione la solicitud que desee eliminar</h5>
+  </div>
+  <div class="row">
+    <p-table (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect()" [value]="vacations" [(selection)]="selectedVacationRequest" dataKey="id" [tableStyle]="{'min-width': '50rem',}">
+      <ng-template pTemplate="header">
+          <tr>
+              <th style="width: 4rem">
+                  <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+              </th>
+              <th>Empleado</th>
+              <th>Fechas</th>
+              <th>Días</th>
+              <th>Estatus</th>
+          </tr>
+      </ng-template>
+      <ng-template pTemplate="body" let-vacation>
+          <tr>
+              <td>
+                  <p-tableCheckbox [value]="vacation"></p-tableCheckbox>
+              </td>
+              <td>{{ vacation.nombre }}</td>
+              <td>{{ vacation.rangoFechas }}</td>
+              <td>{{ vacation.dias }}</td>
+              <td *ngIf="vacation.estatus === 1">Aprobado</td>
+              <td *ngIf="vacation.estatus === 2">Pendiente</td>
+              <td *ngIf="vacation.estatus === 3">Rechazado</td>
+              <td *ngIf="vacation.estatus === 5">Gozada</td>
+          </tr>
+      </ng-template>
+    </p-table>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-toast></p-toast>
+    <p-confirmPopup></p-confirmPopup>
+    <p-button [style]="{borderRadius: '10px'}" [disabled]="isDeleteBtnDisabled" [loading]="isDeleteBtnLoading" (click)="confirm($event)" icon="pi pi-check" label="Cancelar"></p-button>
+  </ng-template>
 </p-dialog>

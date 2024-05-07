@@ -11,6 +11,9 @@ import { DropdownModule } from 'primeng/dropdown';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CalendarModule } from 'primeng/calendar';
 import { InputTextModule } from 'primeng/inputtext';
+import { TableModule } from 'primeng/table';
+import { ConfirmPopupModule } from 'primeng/confirmpopup';
+import { ToastModule } from 'primeng/toast';
 
 
 
@@ -31,7 +34,10 @@ import { InputTextModule } from 'primeng/inputtext';
     FormsModule,
     CalendarModule,
     ReactiveFormsModule,
-    InputTextModule
+    InputTextModule,
+    TableModule,
+    ConfirmPopupModule,
+    ToastModule,
   ],
   exports: [
     ProfileCardComponent,

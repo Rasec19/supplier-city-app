@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { EmployService } from './services/employ.service';
 import { IBalance } from './interfaces/Balance.interface';
 import { IPolicies, IUser } from './interfaces/User.interface';
+import { IValidUser } from './interfaces/ValidUser.interface';
 
 @Component({
   selector: 'app-root',
@@ -10,6 +11,8 @@ import { IPolicies, IUser } from './interfaces/User.interface';
 })
 export class AppComponent {
 
+  public isAdmin: boolean = false;
+  public userExist: boolean = false;
   public tipo: string = '';
   public usuarioLogin: string = '';
   public nombre: string = '';
@@ -20,9 +23,12 @@ export class AppComponent {
 
   constructor( private employeService: EmployService ) {}
 
-  ngOnInit() {
-    // this.employeService.isValidUser(500).subscribe(res => console.log(res))
-    this.employeService.getUserInformation(500).subscribe((res: IUser) => {
+  async ngOnInit() {
+    await this.employeService.isValidUser(500).subscribe(( res: IValidUser ) => {
+      this.isAdmin = res.esAdmin;
+      this.userExist = res.existe;
+    })
+    await this.employeService.getUserInformation(500).subscribe((res: IUser) => {
       this.tipo = res.tipo;
       this.usuarioLogin = res.usuarioLogin;
       this.nombre = res.nombre;

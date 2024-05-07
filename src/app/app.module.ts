@@ -13,6 +13,7 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 registerLocaleData(localeEs);
 @NgModule({
@@ -31,7 +32,9 @@ registerLocaleData(localeEs);
     HttpClientModule,
   ],
   providers: [
-    { provide: LOCALE_ID, useValue: 'es' }
+    { provide: LOCALE_ID, useValue: 'es' },
+    ConfirmationService,
+    MessageService,
   ],
   bootstrap: [AppComponent]
 })

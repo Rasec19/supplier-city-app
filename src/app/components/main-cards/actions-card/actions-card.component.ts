@@ -1,6 +1,9 @@
-import { Component, ElementRef, Input, ViewChild } from '@angular/core';
+import { Component, Input, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { TableRowSelectEvent } from 'primeng/table';
 import { IReport } from 'src/app/interfaces/Report.interface';
+import { IVacationRequest } from 'src/app/interfaces/VacationRequest.interface';
 import { EmployService } from 'src/app/services/employ.service';
 import { ReportService } from 'src/app/services/report.service';
 
@@ -19,6 +22,7 @@ export class ActionsCardComponent {
 
   isVacationsModalActive: boolean = false;
   isReporterModalActive: boolean = false;
+  isCancelModalActive: boolean = false;
   isloaderActive: boolean = false;
   public isDisabled: boolean = false;
   public isDisabledReortBtn: boolean = false;
@@ -26,10 +30,17 @@ export class ActionsCardComponent {
   public maxDate: Date = new Date();
   disabledDates: Date[] = [];
   public selectedDatesVacations: string[] = [];
+  public isDeleteBtnDisabled: boolean = true;
+  public isDeleteBtnLoading: boolean = false;
+  public idSolicitud: number = 0;
+  public nombreUsuario: string =  '';
 
   dates: Date[] | undefined;
   datesInicial: Date[] | undefined;
   datesFinal: Date[] | undefined;
+
+  public vacations: IVacationRequest[] = [];
+  public selectedVacationRequest!: IVacationRequest;
 
   public estatus = [
     {
@@ -62,10 +73,45 @@ export class ActionsCardComponent {
     politica: new FormControl(0),
   })
 
-  constructor( private reportService: ReportService, private employService: EmployService ) {
+  constructor(
+    private reportService: ReportService,
+    private employService: EmployService,
+    private confirmationService: ConfirmationService,
+    private messageService: MessageService,
+  ) {
     this.maxDate.setDate(this.maxDate.getDate() + 30);
     this.calculateDisabledDates();
   }
+
+  async getAllVacationRequest() {
+    await this.employService.getAllVacationRequest().subscribe((res: IVacationRequest[]) => {
+      this.vacations = res;
+    });
+  }
+
+  onRowSelect(e: TableRowSelectEvent):void {
+      this.isDeleteBtnDisabled = false;
+      const { id, nombre } = e.data;
+      this.idSolicitud = id;
+      this.nombreUsuario = nombre;
+  }
+
+  onRowUnselect():void {
+    this.isDeleteBtnDisabled = true;
+  }
+
+  confirm(e: Event) {
+    this.confirmationService.confirm({
+        target: e.target as EventTarget,
+        message: '¿Desea cancelar el registro de vacaciones?',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Si',
+        accept: () => {
+          this.employService.cancelVacationRequest(500, this.idSolicitud, this.nombreUsuario).subscribe(res => console.log(res))
+          this.messageService.add({ severity: 'success', summary: 'Registro eliminado', detail: 'Se ha eliminado el registro de vacaciones con exito.' });
+        },
+    });
+}
 
   calculateDisabledDates(): void {
     const today = new Date();
@@ -166,5 +212,9 @@ export class ActionsCardComponent {
 
   showReporterDialog() {
     this.isReporterModalActive = true;
+  }
+
+  showCancelDailog() {
+    this.isCancelModalActive = true;
   }
 }
