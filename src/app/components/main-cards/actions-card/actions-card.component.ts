@@ -96,8 +96,14 @@ export class ActionsCardComponent {
       this.nombreUsuario = nombre;
   }
 
-  onRowUnselect():void {
-    this.isDeleteBtnDisabled = true;
+  onRowUnselect() {
+    console.log(this.selectedDatesVacations)
+    this.selectedDatesVacations = [];
+    if( this.selectedDatesVacations.length === 0 ) {
+      this.idSolicitud = 0;
+      this.nombreUsuario = '';
+      this.isDeleteBtnDisabled = false;
+    }
   }
 
   confirm(e: Event) {
@@ -107,8 +113,22 @@ export class ActionsCardComponent {
         icon: 'pi pi-exclamation-triangle',
         acceptLabel: 'Si',
         accept: () => {
-          this.employService.cancelVacationRequest(500, this.idSolicitud, this.nombreUsuario).subscribe(res => console.log(res))
-          this.messageService.add({ severity: 'success', summary: 'Registro eliminado', detail: 'Se ha eliminado el registro de vacaciones con exito.' });
+          this.employService.cancelVacationRequest(500, this.idSolicitud, this.nombreUsuario).subscribe(res => {
+            this.messageService.add({
+              severity: 'success',
+              summary: 'Registro eliminado',
+              detail: 'Se ha eliminado el registro de vacaciones con exito.'
+            });
+            this.getAllVacationRequest();
+          },(err) => {
+            // if ( err.error ) {
+            // }
+            this.messageService.add({ severity: 'error', summary:'Error al cancelar', detail: err.error, life: 6000 })
+            // if( err.error.errors.nombre.length > 0 ) {
+            //   this.messageService.add({ severity: 'error', summary:'Error al cancelar', detail: 'Debes seleccionar un registro.', life: 6000 });
+            // }
+
+          })
         },
     });
 }

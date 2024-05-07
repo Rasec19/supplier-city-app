@@ -6,5 +6,6 @@ export interface IBalance {
   disponibleInterno: number,
   periodo: string,
   proporcionales: number,
-  nombrePolitica: string
+  nombrePolitica: string,
+  diasPendientes: number,
 }

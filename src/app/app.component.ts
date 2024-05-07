@@ -20,6 +20,7 @@ export class AppComponent {
   public politicas: Array<IPolicies> = [];
   public politicaUsuario: string = '';
   public politicaVacaciones: number = 0;
+  public diasPendientes: number = 0;
 
   constructor( private employeService: EmployService ) {}
 
@@ -27,7 +28,7 @@ export class AppComponent {
     await this.employeService.isValidUser(500).subscribe(( res: IValidUser ) => {
       this.isAdmin = res.esAdmin;
       this.userExist = res.existe;
-    })
+    });
     await this.employeService.getUserInformation(500).subscribe((res: IUser) => {
       this.tipo = res.tipo;
       this.usuarioLogin = res.usuarioLogin;
@@ -36,6 +37,7 @@ export class AppComponent {
       this.politicas = res.politicas;
       this.politicaUsuario = res.saldos[0].nombrePolitica;
       this.politicaVacaciones = res.saldos[0].politicaVacaciones;
-    })
+      console.log(res)
+    });
   }
 }
