@@ -1,6 +1,7 @@
 import { Component, Input, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { UploadEvent } from 'primeng/fileupload';
 import { TableRowSelectEvent } from 'primeng/table';
 import { IReport } from 'src/app/interfaces/Report.interface';
 import { IVacationRequest } from 'src/app/interfaces/VacationRequest.interface';
@@ -71,6 +72,10 @@ export class ActionsCardComponent {
     fechaFinal: new FormControl('', [Validators.required]),
     estatus: new FormControl(1),
     politica: new FormControl(0),
+  })
+
+  reportConciliacionForm = new FormGroup({
+    file: new FormControl('', [Validators.required]),
   })
 
   constructor(
@@ -228,6 +233,35 @@ export class ActionsCardComponent {
       this.isDisabledReortBtn = !this.isDisabledReortBtn;
       this.isReporterModalActive = false;
     })
+  }
+
+  onUpload(event: any) {
+
+    const file = event.files[0];
+    const formData = new FormData();
+    formData.append('archivo', file);
+
+    this.reportService.createReportConciliacion( 500, formData ).subscribe(res => {
+      const fileBase64 = res.contenidoArchivo;
+
+      const byteCharacters = atob(fileBase64);
+      const byteNumbers = new Array(byteCharacters.length);
+      for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+      }
+      const byteArray = new Uint8Array(byteNumbers);
+      const blob = new Blob([byteArray], { type: res.tipoMime });
+
+      const fileUrl = window.URL.createObjectURL(blob);
+      const elementLink = document.createElement('a');
+      elementLink.href = fileUrl;
+      elementLink.download = res.nombreArchivo;
+      document.body.appendChild(elementLink);
+      elementLink.click();
+      window.URL.revokeObjectURL(fileUrl);
+      this.messageService.add({ severity: 'success', summary: 'Exito', detail: 'Reporte de conciliación generado.' });
+    })
+
   }
 
   showVacationDialog() {

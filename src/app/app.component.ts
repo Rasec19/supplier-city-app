@@ -37,7 +37,6 @@ export class AppComponent {
       this.politicas = res.politicas;
       this.politicaUsuario = res.saldos[0].nombrePolitica;
       this.politicaVacaciones = res.saldos[0].politicaVacaciones;
-      console.log(res)
     });
   }
 }

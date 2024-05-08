@@ -14,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { TableModule } from 'primeng/table';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ToastModule } from 'primeng/toast';
+import { FileUploadModule } from 'primeng/fileupload';
 
 
 
@@ -38,6 +39,7 @@ import { ToastModule } from 'primeng/toast';
     TableModule,
     ConfirmPopupModule,
     ToastModule,
+    FileUploadModule,
   ],
   exports: [
     ProfileCardComponent,

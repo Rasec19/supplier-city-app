@@ -20,4 +20,15 @@ export class ReportService {
 
     return response$;
   }
+
+  createReportConciliacion( id: number, body: any ): Observable<IReport> {
+    let headers = new HttpHeaders();
+
+    headers = headers.append( 'X-EsAdmin', 'true');
+
+    const url = `http://localhost:5084/api/reportes/obtenerReporteConciliacion`;
+    const response$ = this.http.post<IReport>(url, body, { headers });
+
+    return response$;
+  }
 }

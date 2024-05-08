@@ -1,6 +1,8 @@
 <button class="btn btn-primary p-2" (click)="showVacationDialog()">Solicitar Vacaciones</button>
 <button class="btn btn-primary p-2 ms-2" (click)="showReporterDialog()">Generar Reporte</button>
 <button class="btn btn-primary p-2 ms-2" (click)="showCancelDailog()">Cancelar Vacaciones</button>
+<p-toast></p-toast>
+<p-fileUpload [style]="{ marginTop: '10px', backgroundColor: '#0d6efd', padding: '11px' }" mode="basic" chooseLabel="Generar Reporte Conciliación" name="demo[]" chooseIcon="pi pi-file" url="https://www.primefaces.org/cdn/api/upload.php" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" [maxFileSize]="1000000" (onUpload)="onUpload($event)"></p-fileUpload>
 
 <p-dialog header="Solicitud de Vacaciones" [(visible)]="isVacationsModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
   <div class="d-flex flex-column h-100 justify-content-between">
@@ -26,13 +28,13 @@
        </div>
       </form>
     </div>
-    <div class="row">
-      <p-button [loading]="isloaderActive" [disabled]="!vacationRquestForm.valid || isDisabled" [style]="{ margin: 'auto', borderRadius: '8px', textAlign: 'center' }" (click)="vacationRequest()">Enviar solicitud</p-button>
-    </div>
   </div>
+  <ng-template pTemplate="footer">
+    <p-button [loading]="isloaderActive" [disabled]="!vacationRquestForm.valid || isDisabled" [style]="{ margin: 'auto', borderRadius: '8px', textAlign: 'center' }" (click)="vacationRequest()">Enviar solicitud</p-button>
+  </ng-template>
 </p-dialog>
 
-<p-dialog header="Generar Reporte" [(visible)]="isReporterModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
+<p-dialog header="Generar Reporte" [(visible)]="isReporterModalActive" [modal]="true" [style]="{ width: '50vw', height: '100vh' }" [draggable]="false" [resizable]="false">
   <div class="d-flex flex-column h-100 justify-content-between">
     <div class="row">
       <form [formGroup]="reportForm" class="card p-4">
@@ -60,10 +62,10 @@
         </div>
       </form>
     </div>
-    <div class="row">
-      <p-button [loading]="isloaderActive" [disabled]="!reportForm.valid || isDisabledReortBtn" [style]="{ margin: 'auto', borderRadius: '8px', textAlign: 'center' }" (click)="createReport()">Generar Reporte</p-button>
-    </div>
   </div>
+  <ng-template pTemplate="footer">
+    <p-button [loading]="isloaderActive" [disabled]="!reportForm.valid || isDisabledReortBtn" [style]="{ margin: 'auto', borderRadius: '8px', textAlign: 'center' }" (click)="createReport()">Generar Reporte</p-button>
+  </ng-template>
 </p-dialog>
 
 <p-dialog (onShow)="getAllVacationRequest()" (onHide)="reload()" header="Cancelar Vacaciones" [(visible)]="isCancelModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
