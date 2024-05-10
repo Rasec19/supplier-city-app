@@ -131,7 +131,11 @@ export class ActionsCardComponent {
           })
         },
     });
-}
+  }
+
+  reload():void {
+      // location.reload();
+  }
 
   calculateDisabledDates(): void {
     const today = new Date();

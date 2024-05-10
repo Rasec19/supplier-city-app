@@ -66,7 +66,7 @@
   </div>
 </p-dialog>
 
-<p-dialog (onShow)="getAllVacationRequest()" header="Cancelar Vacaciones" [(visible)]="isCancelModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
+<p-dialog (onShow)="getAllVacationRequest()" (onHide)="reload()" header="Cancelar Vacaciones" [(visible)]="isCancelModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
   <div class="row mb-4 mt-2">
     <h5>Seleccione la solicitud que desee eliminar</h5>
   </div>
