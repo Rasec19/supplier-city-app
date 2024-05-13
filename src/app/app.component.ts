@@ -3,6 +3,7 @@ import { EmployService } from './services/employ.service';
 import { IBalance } from './interfaces/Balance.interface';
 import { IPolicies, IUser } from './interfaces/User.interface';
 import { IValidUser } from './interfaces/ValidUser.interface';
+import { AdminService } from './services/admin.service';
 
 @Component({
   selector: 'app-root',
@@ -22,12 +23,18 @@ export class AppComponent {
   public politicaVacaciones: number = 0;
   public diasPendientes: number = 0;
 
-  constructor( private employeService: EmployService ) {}
+  constructor(
+    private employeService: EmployService,
+    private adminService: AdminService,
+  ) {}
 
   async ngOnInit() {
     await this.employeService.isValidUser(500).subscribe(( res: IValidUser ) => {
       this.isAdmin = res.esAdmin;
       this.userExist = res.existe;
+
+      this.adminService.setIsAdmin( this.isAdmin );
+      this.adminService.setUserExist( this.userExist );
     });
     await this.employeService.getUserInformation(500).subscribe((res: IUser) => {
       this.tipo = res.tipo;

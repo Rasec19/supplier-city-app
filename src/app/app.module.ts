@@ -2,7 +2,7 @@ import { LOCALE_ID, NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
@@ -14,6 +14,7 @@ import { NavbarComponent } from './shared/navbar/navbar.component';
 import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { AdminInterceptor } from './interceptors/admin-interceptor.interceptor';
 
 registerLocaleData(localeEs);
 @NgModule({
@@ -33,6 +34,7 @@ registerLocaleData(localeEs);
   ],
   providers: [
     { provide: LOCALE_ID, useValue: 'es' },
+    { provide: HTTP_INTERCEPTORS, useClass: AdminInterceptor, multi: true },
     ConfirmationService,
     MessageService,
   ],

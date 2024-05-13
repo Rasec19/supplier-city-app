@@ -13,12 +13,9 @@ export class EmployService {
   constructor( private http: HttpClient ) { }
 
   isValidUser( id: number ): Observable<IValidUser> {
-    let headers = new HttpHeaders();
-
-    headers = headers.append( 'X-EsAdmin', 'true');
 
     const url = `http://localhost:5084/api/empleado/validarUsuario`;
-    const response$ = this.http.post<IValidUser>(url, id, { headers });
+    const response$ = this.http.post<IValidUser>(url, id);
 
     return response$;
   }
@@ -31,21 +28,17 @@ export class EmployService {
   }
 
   createVacationRequest( id: number, body: any ) {
-    let headers = new HttpHeaders();
-    headers = headers.append( 'X-EsAdmin', 'true');
 
     const url = `http://localhost:5084/api/empleado/solicitarVacaciones/${id}`;
-    const response$ = this.http.post(url, body, { headers });
+    const response$ = this.http.post(url, body)
 
     return response$;
   }
 
   getAllVacationRequest(): Observable<IVacationRequest[]> {
-    let headers = new HttpHeaders();
-    headers = headers.append( 'X-EsAdmin', 'true');
 
     const url = `http://localhost:5084/api/empleado/obtenerTodasLasPeticiones`;
-    const response$ = this.http.get<IVacationRequest[]>(url, { headers });
+    const response$ = this.http.get<IVacationRequest[]>(url);
 
     return response$;
   }
