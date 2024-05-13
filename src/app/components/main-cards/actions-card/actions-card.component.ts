@@ -2,8 +2,10 @@ import { Component, Input, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { TableRowSelectEvent } from 'primeng/table';
+import { Observable } from 'rxjs';
 import { IReport } from 'src/app/interfaces/Report.interface';
 import { IVacationRequest } from 'src/app/interfaces/VacationRequest.interface';
+import { AdminService } from 'src/app/services/admin.service';
 import { EmployService } from 'src/app/services/employ.service';
 import { ReportService } from 'src/app/services/report.service';
 @Component({
@@ -32,6 +34,7 @@ export class ActionsCardComponent {
   public isDeleteBtnLoading: boolean = false;
   public idSolicitud: number = 0;
   public nombreUsuario: string = '';
+  public isAdmin$: Observable<Boolean> = new Observable<Boolean>();
 
   dates: Date[] | undefined;
   datesInicial: Date[] | undefined;
@@ -79,10 +82,15 @@ export class ActionsCardComponent {
     private reportService: ReportService,
     private employService: EmployService,
     private confirmationService: ConfirmationService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private adminService: AdminService
   ) {
     this.maxDate.setDate(this.maxDate.getDate() + 30);
     this.calculateDisabledDates();
+  }
+
+  ngOnInit(): void {
+    this.isAdmin$ = this.adminService.getIsAdmin();
   }
 
   async getAllVacationRequest() {
@@ -101,7 +109,6 @@ export class ActionsCardComponent {
   }
 
   onRowUnselect() {
-    console.log(this.selectedDatesVacations);
     this.selectedDatesVacations = [];
     if (this.selectedDatesVacations.length === 0) {
       this.idSolicitud = 0;

@@ -1,8 +1,8 @@
 <button class="btn btn-primary p-2" (click)="showVacationDialog()">Solicitar Vacaciones</button>
-<button class="btn btn-primary p-2 ms-2" (click)="showReporterDialog()">Generar Reporte</button>
 <button class="btn btn-primary p-2 ms-2" (click)="showCancelDailog()">Cancelar Vacaciones</button>
-<p-toast></p-toast>
-<p-fileUpload [style]="{ marginTop: '10px', backgroundColor: '#0d6efd', padding: '11px' }" mode="basic" chooseLabel="Generar Reporte Conciliación" name="demo[]" chooseIcon="pi pi-file" url="https://www.primefaces.org/cdn/api/upload.php" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" [maxFileSize]="1000000" (onUpload)="onUpload($event)"></p-fileUpload>
+<button class="btn btn-primary p-2 ms-2" (click)="showReporterDialog()" *ngIf="(isAdmin$ | async) === true">Generar Reporte</button>
+<p-toast *ngIf="(isAdmin$ | async) === true"></p-toast>
+<p-fileUpload *ngIf="(isAdmin$ | async) === true" [style]="{ marginTop: '10px', backgroundColor: '#0d6efd', padding: '11px' }" mode="basic" chooseLabel="Generar Reporte Conciliación" name="demo[]" chooseIcon="pi pi-file" url="https://www.primefaces.org/cdn/api/upload.php" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" [maxFileSize]="1000000" (onUpload)="onUpload($event)"></p-fileUpload>
 
 <p-dialog header="Solicitud de Vacaciones" [(visible)]="isVacationsModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
   <div class="d-flex flex-column h-100 justify-content-between">
@@ -10,6 +10,9 @@
       <form [formGroup]="vacationRquestForm" class="card p-4">
         <div class="flex justify-content-center mb-4">
           <h4 class="fw-semibold">Licencia: {{ politicaUsuario }}</h4>
+        </div>
+        <div class="mb-4" *ngIf="(isAdmin$ | async) === true">
+          <p-dropdown [style]="{ width: '100%' }" formControlName="estatus" [optionLabel]="'nombreEstatus'" [optionValue]="'id'"  [options]="estatus" placeholder="Seleccionar estatus (opcional)"></p-dropdown>
         </div>
         <div class="mb-4">
           <p-calendar #calendar (onClickOutside)="printSelectedDates()" [style]="{'width': '100%'}" [minDate]="minDate" [disabledDates]="disabledDates" placeholder="Selecionar fechas" formControlName="fechas" [(ngModel)]="dates" selectionMode="multiple" [readonlyInput]="true"></p-calendar>

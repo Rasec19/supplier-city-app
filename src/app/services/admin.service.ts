@@ -1,28 +1,29 @@
 import { Injectable } from '@angular/core';
+import { BehaviorSubject, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
 
-  private isAdmin: boolean = false;
-  private userExist: boolean = false;
+  private isAdmin$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private userExist$: BehaviorSubject<boolean> = new BehaviorSubject(false);;
 
   constructor() { }
 
   setIsAdmin( isAdmin: boolean ) {
-    this.isAdmin = isAdmin;
+    this.isAdmin$.next( isAdmin )
   }
 
   setUserExist( userExist: boolean ) {
-    this.userExist = userExist;
+    this.userExist$.next( userExist )
   }
 
-  getIsAdmin(): boolean {
-    return this.isAdmin;
+  getIsAdmin(): Observable<boolean> {
+    return this.isAdmin$.asObservable();
   }
 
-  getUserExist(): boolean {
-    return this.userExist;
+  getUserExist(): Observable<boolean> {
+    return this.userExist$.asObservable();
   }
 }
