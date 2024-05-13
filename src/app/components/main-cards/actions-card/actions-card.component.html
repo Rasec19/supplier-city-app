@@ -12,10 +12,12 @@
           <h4 class="fw-semibold">Licencia: {{ politicaUsuario }}</h4>
         </div>
         <div class="mb-4" *ngIf="(isAdmin$ | async) === true">
-          <p-dropdown [style]="{ width: '100%' }" formControlName="estatus" [optionLabel]="'nombreEstatus'" [optionValue]="'id'"  [options]="estatus" placeholder="Seleccionar estatus (opcional)"></p-dropdown>
+          <p-dropdown formControlName="empleado" [style]="{ width: '100%' }" [options]="employes" [(ngModel)]="selectedEmploye" [optionLabel]="'nombre'" [optionValue]="'empleadoId'" [filter]="true" filterBy="nombre" [showClear]="true" placeholder="Seleccionar empleado">
+        </p-dropdown>
         </div>
         <div class="mb-4">
-          <p-calendar #calendar (onClickOutside)="printSelectedDates()" [style]="{'width': '100%'}" [minDate]="minDate" [disabledDates]="disabledDates" placeholder="Selecionar fechas" formControlName="fechas" [(ngModel)]="dates" selectionMode="multiple" [readonlyInput]="true"></p-calendar>
+          <p-calendar *ngIf="isAdmin === false" #calendar (onClickOutside)="printSelectedDates()" [style]="{'width': '100%'}" [minDate]="minDate" [disabledDates]="disabledDates" placeholder="Selecionar fechas" formControlName="fechas" [(ngModel)]="dates" selectionMode="multiple" [readonlyInput]="true"></p-calendar>
+          <p-calendar *ngIf="isAdmin === true" #calendar (onClickOutside)="printSelectedDates()" [style]="{'width': '100%'}" [minDate]="minDate" placeholder="Selecionar fechas" formControlName="fechas" [(ngModel)]="dates" selectionMode="multiple" [readonlyInput]="true"></p-calendar>
           <div class="mt-1" *ngIf="vacationRquestForm.controls.fechas.invalid && vacationRquestForm.controls.fechas.touched">
             <span class="text-danger px-3">Las fechas son requeridas.</span>
           </div>

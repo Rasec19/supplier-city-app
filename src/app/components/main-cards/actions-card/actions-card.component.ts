@@ -34,7 +34,10 @@ export class ActionsCardComponent {
   public isDeleteBtnLoading: boolean = false;
   public idSolicitud: number = 0;
   public nombreUsuario: string = '';
-  public isAdmin$: Observable<Boolean> = new Observable<Boolean>();
+  public isAdmin$: Observable<boolean> = new Observable<boolean>();
+  public isAdmin: boolean = false;
+  public employes: any[] = [];
+  selectedEmploye: string | undefined;
 
   dates: Date[] | undefined;
   datesInicial: Date[] | undefined;
@@ -63,6 +66,7 @@ export class ActionsCardComponent {
   ];
 
   vacationRquestForm = new FormGroup({
+    empleado: new FormControl(''),
     fechas: new FormControl('', [Validators.required]),
     razon: new FormControl(''),
   });
@@ -84,13 +88,18 @@ export class ActionsCardComponent {
     private confirmationService: ConfirmationService,
     private messageService: MessageService,
     private adminService: AdminService
-  ) {
-    this.maxDate.setDate(this.maxDate.getDate() + 30);
-    this.calculateDisabledDates();
-  }
+  ) {}
 
   ngOnInit(): void {
     this.isAdmin$ = this.adminService.getIsAdmin();
+    this.isAdmin$.subscribe(res => {this.isAdmin = res})
+
+    this.employService.getAllEmployes().subscribe(res => {
+      this.employes = res;
+    });
+
+    this.maxDate.setDate(this.maxDate.getDate() + 30);
+    this.calculateDisabledDates();
   }
 
   async getAllVacationRequest() {
@@ -162,7 +171,6 @@ export class ActionsCardComponent {
     const thirtyDaysFromNow = new Date();
     thirtyDaysFromNow.setDate(today.getDate() + 30);
 
-    // Loop through the dates and add them to disabledDates array
     for (
       let d = new Date(today);
       d <= thirtyDaysFromNow;
@@ -187,19 +195,36 @@ export class ActionsCardComponent {
     this.isDisabled = !this.isDisabled;
     this.isloaderActive = !this.isloaderActive;
     const fechas = this.vacationRquestForm.controls['fechas'].value;
+    const empleado = this.vacationRquestForm.controls['empleado'].value;
     const razon = this.vacationRquestForm.controls['razon'].value;
+    let body = {};
 
-    const body = {
-      user_id: 500,
-      policy_id: this.politicaVacaciones,
-      days: fechas!.length,
-      rangoFechas: fechas,
-      reason: razon,
-      created_by: 500,
-      created_on: new Date(),
-      updated_by: 500,
-      updated_on: new Date(),
-    };
+    if( this.isAdmin ) {
+      body = {
+        user_id: empleado,
+        policy_id: this.politicaVacaciones,
+        days: fechas!.length,
+        rangoFechas: fechas,
+        reason: razon,
+        created_by: 500,
+        created_on: new Date(),
+        updated_by: 500,
+        updated_on: new Date(),
+      };
+    } else {
+      body = {
+        user_id: 500,
+        policy_id: this.politicaVacaciones,
+        days: fechas!.length,
+        rangoFechas: fechas,
+        reason: razon,
+        created_by: 500,
+        created_on: new Date(),
+        updated_by: 500,
+        updated_on: new Date(),
+      };
+    }
+
     this.employService.createVacationRequest(500, body).subscribe((res) => {
       this.isVacationsModalActive = false;
       this.isloaderActive = !this.isloaderActive;

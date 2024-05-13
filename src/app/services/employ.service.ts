@@ -58,4 +58,11 @@ export class EmployService {
 
     return response$;
   }
+
+  getAllEmployes(): Observable<any> {
+    const url = `http://localhost:5084/api/empleado/obtenerTodosLosEmpleados`;
+    const response$ = this.http.get(url);
+
+    return response$;
+  }
 }
