@@ -10,6 +10,7 @@ import { AdminService } from '../services/admin.service';
 
 @Injectable()
 export class AdminInterceptor implements HttpInterceptor {
+  private isAdmin: boolean = false;
 
   constructor( private adminService: AdminService, ) {}
 
@@ -19,11 +20,15 @@ export class AdminInterceptor implements HttpInterceptor {
       return next.handle(request);
     }
 
-    const isAdmin = this.adminService.getIsAdmin();
+    const isAdmin$ = this.adminService.getIsAdmin();
+    isAdmin$.subscribe(res => {
+      this.isAdmin = res;
+    })
+
 
     const modifiedReq = request.clone({
       setHeaders: {
-        // 'X-EsAdmin': isAdmin.toString()
+        // 'X-EsAdmin': this.isAdmin.toString()
         'X-EsAdmin': 'true'
       },
     });

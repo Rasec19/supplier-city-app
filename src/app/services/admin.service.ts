@@ -7,7 +7,8 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class AdminService {
 
   private isAdmin$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  private userExist$: BehaviorSubject<boolean> = new BehaviorSubject(false);;
+  private userExist$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private userId: number = 500;
 
   constructor() { }
 
@@ -25,5 +26,9 @@ export class AdminService {
 
   getUserExist(): Observable<boolean> {
     return this.userExist$.asObservable();
+  }
+
+  getUserID(): number {
+    return this.userId;
   }
 }

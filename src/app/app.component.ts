@@ -5,6 +5,8 @@ import { IPolicies, IUser } from './interfaces/User.interface';
 import { IValidUser } from './interfaces/ValidUser.interface';
 import { AdminService } from './services/admin.service';
 
+import { ActivatedRoute } from '@angular/router';
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -26,13 +28,20 @@ export class AppComponent {
   constructor(
     private employeService: EmployService,
     private adminService: AdminService,
+    private route: ActivatedRoute,
   ) {}
 
   async ngOnInit() {
+
+    this.route.queryParams.subscribe(params => {
+      const userId = params['userId'];
+      const admin = params['isAdmin'];
+      console.log({userId, admin})
+    });
+
     await this.employeService.isValidUser(500).subscribe(( res: IValidUser ) => {
       this.isAdmin = res.esAdmin;
       this.userExist = res.existe;
-
       this.adminService.setIsAdmin( this.isAdmin );
       this.adminService.setUserExist( this.userExist );
     });

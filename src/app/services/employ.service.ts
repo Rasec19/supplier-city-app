@@ -43,15 +43,19 @@ export class EmployService {
     return response$;
   }
 
+  getVacationRequestByUser( id: number ): Observable<IVacationRequest[]> {
+
+    const url = `http://localhost:5084/api/empleado/obtenerSolicitudesDeVacacionesEmpleado/${id}`;
+    const response$ = this.http.get<IVacationRequest[]>(url);
+
+    return response$;
+  }
+
   cancelVacationRequest( id: number, idSolicitud: number, nombre: string ) {
     let params = new HttpParams();
     params = params.append('id', id);
     params = params.append('idSolicitud', idSolicitud);
     params = params.append('nombre', nombre);
-
-    console.log({
-      id,idSolicitud,nombre
-    })
 
     const url = `http://localhost:5084/api/empleado/cancelarVacaciones`;
     const response$ = this.http.get(url, {params});

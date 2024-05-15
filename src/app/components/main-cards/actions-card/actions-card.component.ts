@@ -8,6 +8,17 @@ import { IVacationRequest } from 'src/app/interfaces/VacationRequest.interface';
 import { AdminService } from 'src/app/services/admin.service';
 import { EmployService } from 'src/app/services/employ.service';
 import { ReportService } from 'src/app/services/report.service';
+
+interface ISelectedEmploye {
+  añosAntiguedad: number,
+  empleadoId: number,
+  nombre: string,
+  politicas: number,
+  saldos: number,
+  tipo: number,
+  usuarioLogin: number,
+}
+
 @Component({
   selector: 'app-actions-card',
   templateUrl: './actions-card.component.html',
@@ -21,6 +32,7 @@ export class ActionsCardComponent {
   @ViewChild('calendar') calendar!: any;
 
   isVacationsModalActive: boolean = false;
+  isVacationsModalActiveNoAdmin: boolean = false;
   isReporterModalActive: boolean = false;
   isCancelModalActive: boolean = false;
   isloaderActive: boolean = false;
@@ -37,7 +49,10 @@ export class ActionsCardComponent {
   public isAdmin$: Observable<boolean> = new Observable<boolean>();
   public isAdmin: boolean = false;
   public employes: any[] = [];
-  selectedEmploye: string | undefined;
+  public selectedEmploye!: ISelectedEmploye;
+  public politica!: number;
+  public politicaNombre!: string;
+  public templatePolitica: string = ''
 
   dates: Date[] | undefined;
   datesInicial: Date[] | undefined;
@@ -66,7 +81,12 @@ export class ActionsCardComponent {
   ];
 
   vacationRquestForm = new FormGroup({
-    empleado: new FormControl(''),
+    empleado: new FormControl('', [Validators.required]),
+    fechas: new FormControl('', [Validators.required]),
+    razon: new FormControl(''),
+  });
+
+  vacationNoAdminRquestForm = new FormGroup({
     fechas: new FormControl('', [Validators.required]),
     razon: new FormControl(''),
   });
@@ -110,6 +130,26 @@ export class ActionsCardComponent {
       });
   }
 
+  async getVacationRequestByUser() {
+    const user: number = await this.adminService.getUserID();
+
+    await this.employService
+      .getVacationRequestByUser(user)
+      .subscribe((res: IVacationRequest[]) => {
+        this.vacations = res;
+      });
+  }
+
+  getVacations(): void {
+    if( !this.isAdmin ) {
+      this.getVacationRequestByUser();
+    } else if ( this.isAdmin ) {
+
+      this.getAllVacationRequest();
+    }
+
+  }
+
   onRowSelect(e: TableRowSelectEvent): void {
     this.isDeleteBtnDisabled = false;
     const { id, nombre } = e.data;
@@ -142,20 +182,15 @@ export class ActionsCardComponent {
                 summary: 'Registro eliminado',
                 detail: 'Se ha eliminado el registro de vacaciones con exito.',
               });
-              this.getAllVacationRequest();
+              this.getVacations();
             },
             (err) => {
-              // if ( err.error ) {
-              // }
               this.messageService.add({
                 severity: 'error',
                 summary: 'Error al cancelar',
                 detail: err.error,
                 life: 5000,
               });
-              // if( err.error.errors.nombre.length > 0 ) {
-              //   this.messageService.add({ severity: 'error', summary:'Error al cancelar', detail: 'Debes seleccionar un registro.', life: 6000 });
-              // }
             }
           );
       },
@@ -191,44 +226,129 @@ export class ActionsCardComponent {
     this.selectedDatesVacations = dates;
   }
 
-  vacationRequest(): void {
+  onChangeSelectEmploye(e: any) {
+    const { empleadoId } = this.selectedEmploye;
+
+    this.employService.getUserInformation(empleadoId).subscribe(res => {
+      this.politica = res.saldos[0].politicaVacaciones;
+      this.politicaNombre = res.saldos[0].nombrePolitica;
+      this.templatePolitica = `Licencia: ${ this.politicaNombre }`
+    })
+  }
+
+  cleanSelectedEmploye() {
+    this.templatePolitica = 'Seleccione un usuario';
+  }
+
+
+  async vacationRequest() {
     this.isDisabled = !this.isDisabled;
     this.isloaderActive = !this.isloaderActive;
     const fechas = this.vacationRquestForm.controls['fechas'].value;
-    const empleado = this.vacationRquestForm.controls['empleado'].value;
     const razon = this.vacationRquestForm.controls['razon'].value;
+
+    const { empleadoId } = this.selectedEmploye;
+    const userId: number = this.adminService.getUserID();
     let body = {};
 
-    if( this.isAdmin ) {
-      body = {
-        user_id: empleado,
-        policy_id: this.politicaVacaciones,
-        days: fechas!.length,
-        rangoFechas: fechas,
-        reason: razon,
-        created_by: 500,
-        created_on: new Date(),
-        updated_by: 500,
-        updated_on: new Date(),
-      };
-    } else {
-      body = {
-        user_id: 500,
-        policy_id: this.politicaVacaciones,
-        days: fechas!.length,
-        rangoFechas: fechas,
-        reason: razon,
-        created_by: 500,
-        created_on: new Date(),
-        updated_by: 500,
-        updated_on: new Date(),
-      };
-    }
+    body = {
+      user_id: empleadoId,
+      policy_id: this.politica,
+      days: fechas!.length,
+      rangoFechas: fechas,
+      reason: razon,
+      created_by: userId,
+      created_on: new Date(),
+      updated_by: userId,
+      updated_on: new Date(),
+    };
 
-    this.employService.createVacationRequest(500, body).subscribe((res) => {
-      this.isVacationsModalActive = false;
+    await this.employService.createVacationRequest(500, body).subscribe((res) => {
       this.isloaderActive = !this.isloaderActive;
-      location.reload();
+      this.isVacationsModalActive = false;
+      this.isDisabled = !this.isDisabled;
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Exito',
+        detail: 'Solicitud enviada correctamente.'
+      });
+      this.selectedDatesVacations = [];
+      this.vacationRquestForm.reset({
+        empleado: '',
+        fechas: '',
+        razon: '',
+      });
+      // location.reload();
+    }, (err) => {
+      console.log(err)
+      this.isDisabled = !this.isDisabled;
+      this.isloaderActive = !this.isloaderActive;
+      this.selectedDatesVacations = [];
+      this.vacationRquestForm.reset({
+        empleado: '',
+        fechas: '',
+        razon: '',
+      });
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Hubo un error al generar la solicitud.'
+      });
+    });
+  }
+
+  async vacationRequestNoAdmin() {
+    this.isDisabled = !this.isDisabled;
+    this.isloaderActive = !this.isloaderActive;
+    const fechas = this.vacationNoAdminRquestForm.controls['fechas'].value;
+    const razon = this.vacationNoAdminRquestForm.controls['razon'].value;
+
+    const userId: number = await this.adminService.getUserID();
+    let body = {};
+
+    body = {
+      user_id: userId,
+      policy_id: this.politicaVacaciones,
+      days: fechas!.length,
+      rangoFechas: fechas,
+      reason: razon,
+      created_by: userId,
+      created_on: new Date(),
+      updated_by: userId,
+      updated_on: new Date(),
+    };
+
+    await this.employService.createVacationRequest(500, body).subscribe((res) => {
+      this.isloaderActive = !this.isloaderActive;
+      this.isVacationsModalActiveNoAdmin = false;
+      this.isDisabled = !this.isDisabled;
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Exito',
+        detail: 'Solicitud enviada correctamente.'
+      });
+      this.selectedDatesVacations = [];
+      this.vacationRquestForm.reset({
+        empleado: '',
+        fechas: '',
+        razon: '',
+      });
+      // location.reload();
+    }, (err) => {
+      console.log(err)
+      this.isDisabled = !this.isDisabled;
+      this.isloaderActive = !this.isloaderActive;
+      this.selectedDatesVacations = [];
+      this.vacationRquestForm.reset({
+        empleado: '',
+        fechas: '',
+        razon: '',
+      });
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Hubo un error al generar la solicitud.'
+      });
     });
   }
 
@@ -321,6 +441,10 @@ export class ActionsCardComponent {
 
   showVacationDialog() {
     this.isVacationsModalActive = true;
+  }
+
+  showVacationDialogNoAdmin() {
+    this.isVacationsModalActiveNoAdmin = true;
   }
 
   showReporterDialog() {

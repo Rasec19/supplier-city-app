@@ -1,19 +1,23 @@
-<button class="btn btn-primary p-2" (click)="showVacationDialog()">Solicitar Vacaciones</button>
+<button class="btn btn-primary p-2" (click)="showVacationDialog()" *ngIf="(isAdmin$ | async) === true">Solicitar Vacaciones</button>
+<button class="btn btn-primary p-2" (click)="showVacationDialogNoAdmin()" *ngIf="(isAdmin$ | async) === false">Solicitar Vacaciones</button>
 <button class="btn btn-primary p-2 ms-2" (click)="showCancelDailog()">Cancelar Vacaciones</button>
 <button class="btn btn-primary p-2 ms-2" (click)="showReporterDialog()" *ngIf="(isAdmin$ | async) === true">Generar Reporte</button>
 <p-toast *ngIf="(isAdmin$ | async) === true"></p-toast>
 <p-fileUpload *ngIf="(isAdmin$ | async) === true" [style]="{ marginTop: '10px', backgroundColor: '#0d6efd', padding: '11px' }" mode="basic" chooseLabel="Generar Reporte Conciliación" name="demo[]" chooseIcon="pi pi-file" url="https://www.primefaces.org/cdn/api/upload.php" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" [maxFileSize]="1000000" (onUpload)="onUpload($event)"></p-fileUpload>
 
-<p-dialog header="Solicitud de Vacaciones" [(visible)]="isVacationsModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
+<p-dialog #solicitudVacacionAdmin header="Solicitud de Vacaciones" [(visible)]="isVacationsModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
   <div class="d-flex flex-column h-100 justify-content-between">
     <div class="row">
       <form [formGroup]="vacationRquestForm" class="card p-4">
         <div class="flex justify-content-center mb-4">
-          <h4 class="fw-semibold">Licencia: {{ politicaUsuario }}</h4>
+          <h4 class="fw-semibold">{{ (politicaNombre) ?  templatePolitica : 'Seleccione un usuario' }}</h4>
         </div>
         <div class="mb-4" *ngIf="(isAdmin$ | async) === true">
-          <p-dropdown formControlName="empleado" [style]="{ width: '100%' }" [options]="employes" [(ngModel)]="selectedEmploye" [optionLabel]="'nombre'" [optionValue]="'empleadoId'" [filter]="true" filterBy="nombre" [showClear]="true" placeholder="Seleccionar empleado">
-        </p-dropdown>
+          <p-dropdown (onChange)="onChangeSelectEmploye($event)" (onClear)="cleanSelectedEmploye()" formControlName="empleado" [style]="{ width: '100%' }" [options]="employes" [(ngModel)]="selectedEmploye" [optionLabel]="'nombre'"  [filter]="true" filterBy="nombre" [showClear]="true" placeholder="Seleccionar empleado">
+          </p-dropdown>
+          <div class="mt-1" *ngIf="vacationRquestForm.controls.empleado.invalid && vacationRquestForm.controls.empleado.touched">
+            <span class="text-danger px-3">Es  requerido un usuario al cual asignarle vacaciones.</span>
+          </div>
         </div>
         <div class="mb-4">
           <p-calendar *ngIf="isAdmin === false" #calendar (onClickOutside)="printSelectedDates()" [style]="{'width': '100%'}" [minDate]="minDate" [disabledDates]="disabledDates" placeholder="Selecionar fechas" formControlName="fechas" [(ngModel)]="dates" selectionMode="multiple" [readonlyInput]="true"></p-calendar>
@@ -36,6 +40,37 @@
   </div>
   <ng-template pTemplate="footer">
     <p-button [loading]="isloaderActive" [disabled]="!vacationRquestForm.valid || isDisabled" [style]="{ margin: 'auto', borderRadius: '8px', textAlign: 'center' }" (click)="vacationRequest()">Enviar solicitud</p-button>
+  </ng-template>
+</p-dialog>
+
+<p-dialog #solicitudVacacionNoAdmin header="Solicitud de Vacaciones" [(visible)]="isVacationsModalActiveNoAdmin" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
+  <div class="d-flex flex-column h-100 justify-content-between">
+    <div class="row">
+      <form [formGroup]="vacationNoAdminRquestForm" class="card p-4">
+        <div class="flex justify-content-center mb-4">
+          <h4 class="fw-semibold">Licencia: {{ politicaUsuario }}</h4>
+        </div>
+        <div class="mb-4">
+          <p-calendar *ngIf="isAdmin === false" #calendar (onClickOutside)="printSelectedDates()" [style]="{'width': '100%'}" [minDate]="minDate" [disabledDates]="disabledDates" placeholder="Selecionar fechas" formControlName="fechas" [(ngModel)]="dates" selectionMode="multiple" [readonlyInput]="true"></p-calendar>
+          <p-calendar *ngIf="isAdmin === true" #calendar (onClickOutside)="printSelectedDates()" [style]="{'width': '100%'}" [minDate]="minDate" placeholder="Selecionar fechas" formControlName="fechas" [(ngModel)]="dates" selectionMode="multiple" [readonlyInput]="true"></p-calendar>
+          <div class="mt-1" *ngIf="vacationNoAdminRquestForm.controls.fechas.invalid && vacationNoAdminRquestForm.controls.fechas.touched">
+            <span class="text-danger px-3">Las fechas son requeridas.</span>
+          </div>
+          <div class="mt-1" *ngIf="selectedDatesVacations.length >= 1">
+            <span class="px-3 fw-medium">Días seleccionados:</span>
+            <ul>
+              <li *ngFor="let vacationDate of selectedDatesVacations">{{ vacationDate | date:'EEEE, MMMM d, y' }}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="mb-4">
+          <input [style]="{'width': '100%'}" type="text" pInputText formControlName="razon" placeholder="Razon (opcional)"/>
+       </div>
+      </form>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <p-button [loading]="isloaderActive" [disabled]="!vacationNoAdminRquestForm.valid || isDisabled" [style]="{ margin: 'auto', borderRadius: '8px', textAlign: 'center' }" (click)="vacationRequestNoAdmin()">Enviar solicitud</p-button>
   </ng-template>
 </p-dialog>
 
@@ -73,7 +108,7 @@
   </ng-template>
 </p-dialog>
 
-<p-dialog (onShow)="getAllVacationRequest()" (onHide)="reload()" header="Cancelar Vacaciones" [(visible)]="isCancelModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
+<p-dialog (onShow)="getVacations()" (onHide)="reload()" header="Cancelar Vacaciones" [(visible)]="isCancelModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
   <div class="row mb-4 mt-2">
     <h5>Seleccione la solicitud que desee eliminar</h5>
   </div>
