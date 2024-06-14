@@ -1,9 +1,9 @@
-<button class="btn btn-primary p-2" (click)="showVacationDialog()" *ngIf="(isAdmin$ | async) === true">Solicitar Vacaciones</button>
-<button class="btn btn-primary p-2" (click)="showVacationDialogNoAdmin()" *ngIf="(isAdmin$ | async) === false">Solicitar Vacaciones</button>
+<button class="btn btn-primary p-2" (click)="showVacationDialog()" *ngIf="(isAdmin) === true">Solicitar Vacaciones</button>
+<button class="btn btn-primary p-2" (click)="showVacationDialogNoAdmin()" *ngIf="(isAdmin) === false">Solicitar Vacaciones</button>
 <button class="btn btn-primary p-2 ms-2" (click)="showCancelDailog()">Cancelar Vacaciones</button>
-<button class="btn btn-primary p-2 ms-2" (click)="showReporterDialog()" *ngIf="(isAdmin$ | async) === true">Generar Reporte</button>
-<p-toast *ngIf="(isAdmin$ | async) === true"></p-toast>
-<p-fileUpload *ngIf="(isAdmin$ | async) === true" [style]="{ marginTop: '10px', backgroundColor: '#0d6efd', padding: '11px' }" mode="basic" chooseLabel="Generar Reporte Conciliación" name="demo[]" chooseIcon="pi pi-file" url="https://www.primefaces.org/cdn/api/upload.php" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" [maxFileSize]="1000000" (onUpload)="onUpload($event)"></p-fileUpload>
+<button class="btn btn-primary p-2 ms-2" (click)="showReporterDialog()" *ngIf="(isAdmin) === true">Generar Reporte</button>
+<p-toast *ngIf="(isAdmin) === true"></p-toast>
+<p-fileUpload *ngIf="(isAdmin) === true" [style]="{ marginTop: '10px', backgroundColor: '#0d6efd', padding: '11px' }" mode="basic" chooseLabel="Generar Reporte Conciliación" name="demo[]" chooseIcon="pi pi-file" url="https://www.primefaces.org/cdn/api/upload.php" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" [maxFileSize]="1000000" (onUpload)="onUpload($event)"></p-fileUpload>
 
 <p-dialog #solicitudVacacionAdmin header="Solicitud de Vacaciones" [(visible)]="isVacationsModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
   <div class="d-flex flex-column h-100 justify-content-between">
@@ -12,7 +12,7 @@
         <div class="flex justify-content-center mb-4">
           <h4 class="fw-semibold">{{ (politicaNombre) ?  templatePolitica : 'Seleccione un usuario' }}</h4>
         </div>
-        <div class="mb-4" *ngIf="(isAdmin$ | async) === true">
+        <div class="mb-4" *ngIf="(isAdmin) === true">
           <p-dropdown (onChange)="onChangeSelectEmploye($event)" (onClear)="cleanSelectedEmploye()" formControlName="empleado" [style]="{ width: '100%' }" [options]="employes" [(ngModel)]="selectedEmploye" [optionLabel]="'nombre'"  [filter]="true" filterBy="nombre" [showClear]="true" placeholder="Seleccionar empleado">
           </p-dropdown>
           <div class="mt-1" *ngIf="vacationRquestForm.controls.empleado.invalid && vacationRquestForm.controls.empleado.touched">
@@ -131,7 +131,7 @@
                   <p-tableCheckbox [value]="vacation"></p-tableCheckbox>
               </td>
               <td>{{ vacation.nombre }}</td>
-              <td>{{ vacation.rangoFechas }}</td>
+              <td>{{ vacation.rangoFechas | periodFormat }}</td>
               <td>{{ vacation.dias }}</td>
               <td *ngIf="vacation.estatus === 1">Aprobado</td>
               <td *ngIf="vacation.estatus === 2">Pendiente</td>

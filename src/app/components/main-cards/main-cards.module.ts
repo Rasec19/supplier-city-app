@@ -15,6 +15,7 @@ import { TableModule } from 'primeng/table';
 import { ConfirmPopupModule } from 'primeng/confirmpopup';
 import { ToastModule } from 'primeng/toast';
 import { FileUploadModule } from 'primeng/fileupload';
+import { PeriodFormatPipe } from 'src/app/pipes/period-format.pipe';
 
 
 
@@ -40,6 +41,7 @@ import { FileUploadModule } from 'primeng/fileupload';
     ConfirmPopupModule,
     ToastModule,
     FileUploadModule,
+    PeriodFormatPipe
   ],
   exports: [
     ProfileCardComponent,

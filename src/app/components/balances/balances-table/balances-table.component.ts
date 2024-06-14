@@ -13,7 +13,7 @@ export class BalancesTableComponent {
 
   constructor( private employService: EmployService ) {}
 
-  formatPeriodo(datePeriod: string): string[] {
+  periodFormat(datePeriod: string): string[] {
     const dates = datePeriod.split(',');
     const newDatePeriod = dates.map(date => date.trim().split(' ')[0].concat(' '));
     return newDatePeriod

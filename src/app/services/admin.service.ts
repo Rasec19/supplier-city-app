@@ -6,26 +6,26 @@ import { BehaviorSubject, Observable } from 'rxjs';
 })
 export class AdminService {
 
-  private isAdmin$: BehaviorSubject<boolean> = new BehaviorSubject(false);
-  private userExist$: BehaviorSubject<boolean> = new BehaviorSubject(false);
+  private isAdmin!: boolean;
+  private userExist!: boolean;
   private userId: number = 500;
 
   constructor() { }
 
   setIsAdmin( isAdmin: boolean ) {
-    this.isAdmin$.next( isAdmin )
+    this.isAdmin = isAdmin;
   }
 
   setUserExist( userExist: boolean ) {
-    this.userExist$.next( userExist )
+    this.userExist = userExist;
   }
 
-  getIsAdmin(): Observable<boolean> {
-    return this.isAdmin$.asObservable();
+  getIsAdmin(): boolean {
+    return this.isAdmin;
   }
 
-  getUserExist(): Observable<boolean> {
-    return this.userExist$.asObservable();
+  getUserExist(): boolean {
+    return this.userExist;
   }
 
   getUserID(): number {

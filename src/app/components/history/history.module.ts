@@ -7,12 +7,13 @@ import { DropdownModule } from 'primeng/dropdown';
 import { CardModule } from 'primeng/card';
 
 import { HistoryTableComponent } from './history-table/history-table.component';
+import { PeriodFormatPipe } from 'src/app/pipes/period-format.pipe';
 
 
 
 @NgModule({
   declarations: [
-    HistoryTableComponent
+    HistoryTableComponent,
   ],
   imports: [
     CommonModule,
@@ -21,6 +22,7 @@ import { HistoryTableComponent } from './history-table/history-table.component';
     ReactiveFormsModule,
     FormsModule,
     DropdownModule,
+    PeriodFormatPipe
   ],
   exports: [
     HistoryTableComponent,

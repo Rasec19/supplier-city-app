@@ -45,7 +45,7 @@
     </ng-template>
     <ng-template pTemplate="body" let-history>
         <tr>
-            <td class="text-center">{{ history.fecha }}</td>
+            <td class="text-center">{{ history.fecha | periodFormat }}</td>
             <td class="text-center">{{ history.nombrePolitica }}</td>
             <td class="text-center">{{ history.descripcion }}</td>
             <td class="text-center">{{ history.dias }}</td>

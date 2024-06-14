@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import {
   HttpRequest,
   HttpHandler,
@@ -6,13 +6,13 @@ import {
   HttpInterceptor
 } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { AdminService } from '../services/admin.service';
 
 @Injectable()
 export class AdminInterceptor implements HttpInterceptor {
-  private isAdmin: boolean = false;
 
-  constructor( private adminService: AdminService, ) {}
+  private isAdmin!: string;
+
+  constructor( ) {}
 
   intercept(request: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 
@@ -20,16 +20,12 @@ export class AdminInterceptor implements HttpInterceptor {
       return next.handle(request);
     }
 
-    const isAdmin$ = this.adminService.getIsAdmin();
-    isAdmin$.subscribe(res => {
-      this.isAdmin = res;
-    })
-
+    this.isAdmin = window.location.href.split('isAdmin=')[1];
 
     const modifiedReq = request.clone({
       setHeaders: {
-        // 'X-EsAdmin': this.isAdmin.toString()
-        'X-EsAdmin': 'true'
+        'X-EsAdmin': this.isAdmin
+        // 'X-EsAdmin': 'true'
       },
     });
 

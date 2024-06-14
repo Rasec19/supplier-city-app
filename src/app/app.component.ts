@@ -6,6 +6,7 @@ import { IValidUser } from './interfaces/ValidUser.interface';
 import { AdminService } from './services/admin.service';
 
 import { ActivatedRoute } from '@angular/router';
+import { filter, tap } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -13,6 +14,9 @@ import { ActivatedRoute } from '@angular/router';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+
+  private userId!: number;
+  private admin!: boolean;
 
   public isAdmin: boolean = false;
   public userExist: boolean = false;
@@ -29,23 +33,22 @@ export class AppComponent {
     private employeService: EmployService,
     private adminService: AdminService,
     private route: ActivatedRoute,
-  ) {}
+  ) {
+    console.log(window.location.href)
+    this.admin = Boolean(window.location.href.split('isAdmin=')[1]);
+    this.userId = Number(window.location.href.split('userId=')[1].split('&')[0]);
+    console.log(this.admin)
+    console.log(this.userId)
+    this.adminService.setIsAdmin(this.admin)
+  }
 
-  async ngOnInit() {
+  ngAfterViewInit() {
 
-    this.route.queryParams.subscribe(params => {
-      const userId = params['userId'];
-      const admin = params['isAdmin'];
-      console.log({userId, admin})
-    });
-
-    await this.employeService.isValidUser(500).subscribe(( res: IValidUser ) => {
+    this.employeService.isValidUser(500).subscribe(( res: IValidUser ) => {
       this.isAdmin = res.esAdmin;
       this.userExist = res.existe;
-      this.adminService.setIsAdmin( this.isAdmin );
-      this.adminService.setUserExist( this.userExist );
     });
-    await this.employeService.getUserInformation(500).subscribe((res: IUser) => {
+    this.employeService.getUserInformation(500).subscribe((res: IUser) => {
       this.tipo = res.tipo;
       this.usuarioLogin = res.usuarioLogin;
       this.nombre = res.nombre;

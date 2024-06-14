@@ -111,8 +111,9 @@ export class ActionsCardComponent {
   ) {}
 
   ngOnInit(): void {
-    this.isAdmin$ = this.adminService.getIsAdmin();
-    this.isAdmin$.subscribe(res => {this.isAdmin = res})
+    this.isAdmin = this.adminService.getIsAdmin();
+    console.log(this.isAdmin);
+    // this.isAdmin$.subscribe(res => {this.isAdmin = res})
 
     this.employService.getAllEmployes().subscribe(res => {
       this.employes = res;
@@ -228,6 +229,8 @@ export class ActionsCardComponent {
 
   onChangeSelectEmploye(e: any) {
     const { empleadoId } = this.selectedEmploye;
+
+    console.log(empleadoId)
 
     this.employService.getUserInformation(empleadoId).subscribe(res => {
       this.politica = res.saldos[0].politicaVacaciones;

@@ -4,6 +4,7 @@ import {Observable } from 'rxjs';
 import { IHistory } from 'src/app/interfaces/History.interface';
 import { IPolicies } from 'src/app/interfaces/User.interface';
 import { HistoryService } from 'src/app/services/history.service';
+import { AdminService } from '../../../services/admin.service';
 
 @Component({
   selector: 'app-history-table',
@@ -22,12 +23,12 @@ export class HistoryTableComponent {
     year: new FormControl('', [Validators.required]),
   });
 
-  constructor( private historyService: HistoryService ) {}
+  constructor( private historyService: HistoryService, private adminService: AdminService ) {}
 
   filtrar(): void {
     const politic = this.historyForm.controls['policies'].value!
     const year = this.historyForm.controls['year'].value!
-    const id = 500;
+    const id = this.adminService.getUserID();
 
     console.log({politic, year, id})
 
