@@ -8,12 +8,16 @@ export class AdminService {
 
   private isAdmin!: boolean;
   private userExist!: boolean;
-  private userId: number = 500;
+  private userId!: number;
 
   constructor() { }
 
   setIsAdmin( isAdmin: boolean ) {
     this.isAdmin = isAdmin;
+  }
+
+  setUserId( userId: number ) {
+    this.userId = userId;
   }
 
   setUserExist( userExist: boolean ) {

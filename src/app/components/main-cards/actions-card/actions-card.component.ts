@@ -133,6 +133,7 @@ export class ActionsCardComponent {
 
   async getVacationRequestByUser() {
     const user: number = await this.adminService.getUserID();
+    console.log(user)
 
     await this.employService
       .getVacationRequestByUser(user)
@@ -168,6 +169,8 @@ export class ActionsCardComponent {
   }
 
   confirm(e: Event) {
+    const userId = this.adminService.getUserID();
+
     this.confirmationService.confirm({
       target: e.target as EventTarget,
       message: '¿Desea cancelar el registro de vacaciones?',
@@ -175,7 +178,7 @@ export class ActionsCardComponent {
       acceptLabel: 'Si',
       accept: () => {
         this.employService
-          .cancelVacationRequest(500, this.idSolicitud, this.nombreUsuario)
+          .cancelVacationRequest(userId, this.idSolicitud, this.nombreUsuario)
           .subscribe(
             (res) => {
               this.messageService.add({
@@ -250,6 +253,7 @@ export class ActionsCardComponent {
 
     const { empleadoId } = this.selectedEmploye;
     const userId: number = this.adminService.getUserID();
+    console.log(userId)
     let body = {};
 
     body = {
@@ -264,7 +268,7 @@ export class ActionsCardComponent {
       updated_on: new Date(),
     };
 
-    await this.employService.createVacationRequest(500, body).subscribe((res) => {
+    await this.employService.createVacationRequest(empleadoId, body).subscribe((res) => {
       this.isloaderActive = !this.isloaderActive;
       this.isVacationsModalActive = false;
       this.isDisabled = !this.isDisabled;
@@ -305,6 +309,7 @@ export class ActionsCardComponent {
     const razon = this.vacationNoAdminRquestForm.controls['razon'].value;
 
     const userId: number = await this.adminService.getUserID();
+    console.log(userId)
     let body = {};
 
     body = {
@@ -319,7 +324,7 @@ export class ActionsCardComponent {
       updated_on: new Date(),
     };
 
-    await this.employService.createVacationRequest(500, body).subscribe((res) => {
+    await this.employService.createVacationRequest(userId, body).subscribe((res) => {
       this.isloaderActive = !this.isloaderActive;
       this.isVacationsModalActiveNoAdmin = false;
       this.isDisabled = !this.isDisabled;
@@ -357,13 +362,14 @@ export class ActionsCardComponent {
     this.isloaderActive = !this.isloaderActive;
     this.isDisabledReortBtn = !this.isDisabledReortBtn;
 
+    const userId = this.adminService.getUserID();
     const fechaInicio = this.reportForm.controls['fechaInicial'].value;
     const fechaFin = this.reportForm.controls['fechaFinal'].value;
     const estatus = this.reportForm.controls['estatus'].value;
     const politicaId = this.reportForm.controls['politica'].value;
 
     const body = {
-      empleadoId: 500,
+      empleadoId: userId,
       fechaInicio,
       fechaFin,
       estatus,

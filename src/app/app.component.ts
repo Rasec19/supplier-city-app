@@ -1,7 +1,4 @@
 import { Component } from '@angular/core';
-import { EmployService } from './services/employ.service';
-import { IBalance } from './interfaces/Balance.interface';
-import { IPolicies } from './interfaces/User.interface';
 import { AdminService } from './services/admin.service';
 
 import { Router } from '@angular/router';
@@ -32,9 +29,11 @@ export class AppComponent {
       this.admin = isAdminParam === 'true';
       this.userId = Number(userIdParam);
 
+      console.log(this.userId);
+
       this.adminService.setIsAdmin(this.admin);
+      this.adminService.setUserId(this.userId);
     } else {
-      // Manejo del error: navegar a una página de error o mostrar un mensaje
       this.router.navigate(['/error-page']);
     }
   }

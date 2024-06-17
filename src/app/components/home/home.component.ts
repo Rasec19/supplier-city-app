@@ -1,7 +1,9 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 import { IBalance } from 'src/app/interfaces/Balance.interface';
 import { IPolicies, IUser } from 'src/app/interfaces/User.interface';
 import { IValidUser } from 'src/app/interfaces/ValidUser.interface';
+import { AdminService } from 'src/app/services/admin.service';
 import { EmployService } from 'src/app/services/employ.service';
 
 @Component({
@@ -11,8 +13,6 @@ import { EmployService } from 'src/app/services/employ.service';
 })
 export class HomeComponent {
 
-  public isAdmin: boolean = false;
-  public userExist: boolean = false;
   public tipo: string = '';
   public usuarioLogin: string = '';
   public nombre: string = '';
@@ -22,15 +22,11 @@ export class HomeComponent {
   public politicaVacaciones: number = 0;
   public diasPendientes: number = 0;
 
-  constructor(private employeService: EmployService,) {}
+  constructor(private employeService: EmployService, private adminService: AdminService, private router: Router) {}
 
   ngAfterViewInit() {
-
-    this.employeService.isValidUser(500).subscribe(( res: IValidUser ) => {
-      this.isAdmin = res.esAdmin;
-      this.userExist = res.existe;
-    });
-    this.employeService.getUserInformation(500).subscribe((res: IUser) => {
+    const userId = this.adminService.getUserID();
+    this.employeService.getUserInformation(userId).subscribe((res: IUser) => {
       this.tipo = res.tipo;
       this.usuarioLogin = res.usuarioLogin;
       this.nombre = res.nombre;
@@ -38,6 +34,12 @@ export class HomeComponent {
       this.politicas = res.politicas;
       this.politicaUsuario = res.saldos[0].nombrePolitica;
       this.politicaVacaciones = res.saldos[0].politicaVacaciones;
+    }, (err) => {
+      const { status } = err;
+      console.log(err)
+      if( status === 404 ) {
+        this.router.navigate(['/error-page']);
+      }
     });
   }
 
