@@ -15,11 +15,15 @@ import { registerLocaleData } from '@angular/common';
 import localeEs from '@angular/common/locales/es';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { AdminInterceptor } from './interceptors/admin-interceptor.interceptor';
+import { ErrorPageComponent } from './components/error-page/error-page.component';
+import { HomeComponent } from './components/home/home.component';
 
 registerLocaleData(localeEs);
 @NgModule({
   declarations: [
     AppComponent,
+    ErrorPageComponent,
+    HomeComponent,
   ],
   imports: [
     CommonModule,

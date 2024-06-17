@@ -1,0 +1,30 @@
+/* error-page.component.css */
+.error-container {
+  text-align: center;
+  margin-top: 50px;
+}
+
+.error-container h1 {
+  font-size: 3em;
+  color: #d9534f;
+}
+
+.error-container p {
+  font-size: 1.5em;
+  color: #5a5a5a;
+}
+
+.error-container button {
+  margin-top: 20px;
+  padding: 10px 20px;
+  font-size: 1em;
+  color: #fff;
+  background-color: #0275d8;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.error-container button:hover {
+  background-color: #025aa5;
+}

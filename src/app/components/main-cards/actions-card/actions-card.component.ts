@@ -230,8 +230,6 @@ export class ActionsCardComponent {
   onChangeSelectEmploye(e: any) {
     const { empleadoId } = this.selectedEmploye;
 
-    console.log(empleadoId)
-
     this.employService.getUserInformation(empleadoId).subscribe(res => {
       this.politica = res.saldos[0].politicaVacaciones;
       this.politicaNombre = res.saldos[0].nombrePolitica;

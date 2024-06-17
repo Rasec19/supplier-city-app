@@ -30,8 +30,6 @@ export class HistoryTableComponent {
     const year = this.historyForm.controls['year'].value!
     const id = this.adminService.getUserID();
 
-    console.log({politic, year, id})
-
     this.histories$ = this.historyService.getUserHistory(id, year, politic);
   }
 
