@@ -29,8 +29,6 @@ export class AppComponent {
       this.admin = isAdminParam === 'true';
       this.userId = Number(userIdParam);
 
-      console.log(this.userId);
-
       this.adminService.setIsAdmin(this.admin);
       this.adminService.setUserId(this.userId);
     } else {

@@ -112,12 +112,12 @@ export class ActionsCardComponent {
 
   ngOnInit(): void {
     this.isAdmin = this.adminService.getIsAdmin();
-    console.log(this.isAdmin);
-    // this.isAdmin$.subscribe(res => {this.isAdmin = res})
 
-    this.employService.getAllEmployes().subscribe(res => {
-      this.employes = res;
-    });
+    if( this.isAdmin ) {
+      this.employService.getAllEmployes().subscribe(res => {
+        this.employes = res;
+      });
+    }
 
     this.maxDate.setDate(this.maxDate.getDate() + 30);
     this.calculateDisabledDates();
@@ -208,7 +208,7 @@ export class ActionsCardComponent {
   calculateDisabledDates(): void {
     const today = new Date();
     const thirtyDaysFromNow = new Date();
-    thirtyDaysFromNow.setDate(today.getDate() + 30);
+    thirtyDaysFromNow.setDate(today.getDate() + 15);
 
     for (
       let d = new Date(today);
