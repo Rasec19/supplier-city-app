@@ -5,6 +5,7 @@ import { IHistory } from 'src/app/interfaces/History.interface';
 import { IPolicies } from 'src/app/interfaces/User.interface';
 import { HistoryService } from 'src/app/services/history.service';
 import { AdminService } from '../../../services/admin.service';
+import { MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-history-table',
@@ -23,7 +24,11 @@ export class HistoryTableComponent {
     year: new FormControl('', [Validators.required]),
   });
 
-  constructor( private historyService: HistoryService, private adminService: AdminService ) {}
+  constructor(
+    private historyService: HistoryService,
+    private adminService: AdminService ,
+    private messageService: MessageService,
+  ) {}
 
   filtrar(): void {
     const politic = this.historyForm.controls['policies'].value!
@@ -32,6 +37,19 @@ export class HistoryTableComponent {
     console.log(id)
 
     this.histories$ = this.historyService.getUserHistory(id, year, politic);
+
+    this.histories$.subscribe({
+      next: (res) => {
+        console.log(res)
+        if( res.length == 0 ) {
+          this.messageService.add({
+            severity: 'warn',
+            summary: 'Advertencia',
+            detail: 'No se encontro alguna "Historia".',
+          });
+        }
+      }
+    })
   }
 
   clean(): void {

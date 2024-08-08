@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
 import { AdminService } from './services/admin.service';
-
+import { PrimeNGConfig } from 'primeng/api';
 import { Router } from '@angular/router';
+import { translate } from './handler/translatePrimeNG';
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -18,9 +19,12 @@ export class AppComponent {
   constructor(
     private adminService: AdminService,
     private router: Router,
+    private primengConfig: PrimeNGConfig,
   ) {}
 
   ngOnInit() {
+    this.primengConfig.setTranslation(translate);
+
     const urlParams = new URLSearchParams(window.location.search);
     const isAdminParam = urlParams.get('isAdmin');
     const userIdParam = urlParams.get('userId');

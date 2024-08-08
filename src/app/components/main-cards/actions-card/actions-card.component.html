@@ -2,7 +2,7 @@
 <button class="btn btn-primary p-2" (click)="showVacationDialogNoAdmin()" *ngIf="(isAdmin) === false">Solicitar Vacaciones</button>
 <button class="btn btn-primary p-2 ms-2" (click)="showCancelDailog()">Cancelar Vacaciones</button>
 <button class="btn btn-primary p-2 ms-2" (click)="showReporterDialog()" *ngIf="(isAdmin) === true">Generar Reporte</button>
-<p-toast *ngIf="(isAdmin) === true"></p-toast>
+<p-toast position="top-center"></p-toast>
 <p-fileUpload *ngIf="(isAdmin) === true" [style]="{ marginTop: '10px', backgroundColor: '#0d6efd', padding: '11px' }" mode="basic" chooseLabel="Generar Reporte Conciliación" name="demo[]" chooseIcon="pi pi-file" url="https://www.primefaces.org/cdn/api/upload.php" accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel" [maxFileSize]="1000000" (onUpload)="onUpload($event)"></p-fileUpload>
 
 <p-dialog #solicitudVacacionAdmin header="Solicitud de Vacaciones" [(visible)]="isVacationsModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
@@ -108,41 +108,37 @@
   </ng-template>
 </p-dialog>
 
-<p-dialog (onShow)="getVacations()" (onHide)="reload()" header="Cancelar Vacaciones" [(visible)]="isCancelModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false">
+<p-dialog (onShow)="getVacations()" (onHide)="reload()" header="Cancelar Vacaciones" [(visible)]="isCancelModalActive" [modal]="true" [style]="{ width: '50vw', height: '80vh' }" [draggable]="false" [resizable]="false" selectionMode="single">
   <div class="row mb-4 mt-2">
     <h5>Seleccione la solicitud que desee eliminar</h5>
   </div>
   <div class="row">
-    <p-table (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect()" [value]="vacations" [(selection)]="selectedVacationRequest" dataKey="id" [tableStyle]="{'min-width': '50rem',}">
+
+    <p-table (onRowSelect)="onRowSelect($event)" (onRowUnselect)="onRowUnselect()" [value]="vacations" selectionMode="single" [(selection)]="selectedVacationRequest" dataKey="id" [tableStyle]="{'min-width': '50rem'}" responsiveLayout="scroll">
       <ng-template pTemplate="header">
-          <tr>
-              <th style="width: 4rem">
-                  <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
-              </th>
-              <th>Empleado</th>
-              <th>Fechas</th>
-              <th>Días</th>
-              <th>Estatus</th>
-          </tr>
+        <tr>
+            <th>Empleado</th>
+            <th>Fechas</th>
+            <th>Días</th>
+            <th>Estatus</th>
+        </tr>
       </ng-template>
       <ng-template pTemplate="body" let-vacation>
-          <tr>
-              <td>
-                  <p-tableCheckbox [value]="vacation"></p-tableCheckbox>
-              </td>
-              <td>{{ vacation.nombre }}</td>
-              <td>{{ vacation.rangoFechas | periodFormat }}</td>
-              <td>{{ vacation.dias }}</td>
-              <td *ngIf="vacation.estatus === 1">Aprobado</td>
-              <td *ngIf="vacation.estatus === 2">Pendiente</td>
-              <td *ngIf="vacation.estatus === 3">Rechazado</td>
-              <td *ngIf="vacation.estatus === 5">Gozada</td>
-          </tr>
-      </ng-template>
-    </p-table>
+        <tr [pSelectableRow]="vacation">
+            <td>{{ vacation.nombre }}</td>
+            <td>{{ vacation.rangoFehcas ? (vacation.rangoFechas | periodFormat) : "Sin datos" }}</td>
+            <td>{{ vacation.dias }}</td>
+            <td *ngIf="vacation.estatus === 1">Aprobado</td>
+            <td *ngIf="vacation.estatus === 2">Pendiente</td>
+            <td *ngIf="vacation.estatus === 3">Rechazado</td>
+            <td *ngIf="vacation.estatus === 5">Gozada</td>
+        </tr>
+    </ng-template>
+  </p-table>
+
   </div>
+
   <ng-template pTemplate="footer">
-    <p-toast></p-toast>
     <p-confirmPopup></p-confirmPopup>
     <p-button [style]="{borderRadius: '10px'}" [disabled]="isDeleteBtnDisabled" [loading]="isDeleteBtnLoading" (click)="confirm($event)" icon="pi pi-check" label="Cancelar"></p-button>
   </ng-template>

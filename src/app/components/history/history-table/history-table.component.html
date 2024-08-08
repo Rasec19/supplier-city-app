@@ -1,6 +1,6 @@
-<p-card header="Historia" [style]="{ width: '100rem', margin: 'auto', marginTop: '4rem', marginBottom: '4rem'}">
+<p-card header="Historia" [style]="{ width: '90%', margin: 'auto', marginTop: '4rem', paddingLeft: '3rem', paddingRight: '3rem'}">
   <div class="row">
-    <form [formGroup]="historyForm" class="mb-4 px-3">
+    <form [formGroup]="historyForm" class="mb-5 px-3">
       <div class="row mb-3">
         <div class="col-6">
           <p-dropdown [style]="{ width: '100%' }" formControlName="policies" [optionLabel]="'nombrePolitica'" [optionValue]="'id'"  [options]="policies" placeholder="Seleccionar politica"></p-dropdown>
@@ -34,6 +34,7 @@
     [tableStyle]="{ 'min-width': '50rem' }"
     currentPageReportTemplate="Registros del {first} hasta el {last} de {totalRecords} totales"
     [rowsPerPageOptions]="[5, 10, 20]"
+    responsiveLayout="scroll"
 >
     <ng-template pTemplate="header">
         <tr>
@@ -45,7 +46,7 @@
     </ng-template>
     <ng-template pTemplate="body" let-history>
         <tr>
-            <td class="text-center">{{ history.fecha | periodFormat }}</td>
+            <td class="text-center">{{ history.fecha ? (history.fecha | periodFormat) : "Sin datos" }}</td>
             <td class="text-center">{{ history.nombrePolitica }}</td>
             <td class="text-center">{{ history.descripcion }}</td>
             <td class="text-center">{{ history.dias }}</td>

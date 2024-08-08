@@ -8,6 +8,7 @@ import { CardModule } from 'primeng/card';
 
 import { HistoryTableComponent } from './history-table/history-table.component';
 import { PeriodFormatPipe } from 'src/app/pipes/period-format.pipe';
+import { ToastModule } from 'primeng/toast';
 
 
 
@@ -22,7 +23,8 @@ import { PeriodFormatPipe } from 'src/app/pipes/period-format.pipe';
     ReactiveFormsModule,
     FormsModule,
     DropdownModule,
-    PeriodFormatPipe
+    PeriodFormatPipe,
+    ToastModule
   ],
   exports: [
     HistoryTableComponent,

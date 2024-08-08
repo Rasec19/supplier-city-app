@@ -111,6 +111,7 @@ export class ActionsCardComponent {
   ) {}
 
   ngOnInit(): void {
+
     this.isAdmin = this.adminService.getIsAdmin();
 
     if( this.isAdmin ) {
@@ -351,9 +352,9 @@ export class ActionsCardComponent {
         razon: '',
       });
       this.messageService.add({
-        severity: 'error',
-        summary: 'Error',
-        detail: 'Hubo un error al generar la solicitud.'
+        severity: 'warn',
+        summary: 'Advertencia',
+        detail: `Hubo un error al generar la solicitud "${err.error}".`
       });
     });
   }
