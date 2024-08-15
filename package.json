@@ -6,7 +6,8 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "buildProd": "ng build --configuration production"
   },
   "private": true,
   "dependencies": {
@@ -22,6 +23,7 @@
     "primeicons": "^7.0.0",
     "primeng": "^16.9.1",
     "rxjs": "~7.8.0",
+    "supplier-city-app": "file:",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
   },

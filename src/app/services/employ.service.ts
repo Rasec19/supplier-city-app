@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { IUser } from '../interfaces/User.interface';
 import { IValidUser } from '../interfaces/ValidUser.interface';
 import { IVacationRequest } from '../interfaces/VacationRequest.interface';
-import { environment } from '../../environment/environment';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

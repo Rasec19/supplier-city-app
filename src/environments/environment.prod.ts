@@ -1,6 +1,6 @@
 export const environment = {
   prduction: true,
-  host: 'https://{{PRODUCTION}}/api/',
+  host: 'http://localhost:987/api/',
   employees: {
     validUser: 'empleado/validarUsuario',
     userInformation: 'empleado/obtenerDatosDelEmpleado',
